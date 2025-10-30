@@ -1,6 +1,6 @@
 # Gerenciador de Projetos Pessoal
 
-Este é um Gerenciador de Projetos Pessoal feito em Java, desenvolvido como trabalho final para a disciplina de Programação Orientada a Objetos.
+Este é um Gerenciador de Projetos Pessoal feito em Java, desenvolvido como trabalho final para a disciplina de Programação Orientada a Objetos II.
 
 O objetivo principal era construir um sistema completo do zero, aplicando de forma correta os conceitos de POO, arquitetura de software e padrões de projeto.
 
@@ -25,7 +25,7 @@ O mais importante do trabalho é a *forma* como ele foi construído.
 3.  **Padrão DAO (Data Access Object):**
     A lógica de salvar e carregar os dados foi separada com uma interface (`IPersistenceDAO`). Isso permite que o sistema salve em diferentes formatos (como Serialização Java ou JSON) sem que o `ProjectManager` (a classe principal do `model`) precise saber *como* os dados estão sendo salvos.
 
-4.  **Herança e Polimorfismo (O "Coração" da POO):**
+4.  **Herança e Polimorfismo:**
     Este é o principal conceito de POO aplicado. Existe uma classe abstrata `Task` que serve de base para 4 tipos diferentes de tarefas.
     * `SimpleTask`
     * `DeadlineTask` (tem data de entrega e responsável)
@@ -40,7 +40,7 @@ Abaixo está o diagrama de classes que mostra a estrutura do projeto.
 
 ---
 
-![Diagrama de Classes](docs/diagrama_classes.png)
+![Diagrama de Classes](docs/diagramaUML.png)
 
 ---
 
