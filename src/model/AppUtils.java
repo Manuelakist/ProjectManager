@@ -37,4 +37,13 @@ public final class AppUtils {
         return priority >= 1 && priority <= 5;
     }
 
+    /**
+     * Valida se uma String é nula, vazia ou contém apenas espaços em branco.
+     * @param str A String a ser checada.
+     * @return true se a String for nula ou vazia, false caso contrário.
+     */
+    public static boolean isStringNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
+    }
+
 }
