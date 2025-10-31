@@ -36,7 +36,7 @@ public class BugReport extends Task {
         super(description, priority);
         this.setStepsToReproduce(steps);
         this.setSeverity(severity);
-        this.status = Status.RELATADO;
+        this.setStatus(Status.RELATADO);
     }
 
     // --- Getters ---

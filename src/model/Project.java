@@ -16,10 +16,10 @@ import java.util.ArrayList;
  */
 public class Project {
 
-    private String id;
+    private final String id;
     private String name;
     private LocalDate generalDeadline;
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     /**
      * Construtor para criar um novo Projeto.
