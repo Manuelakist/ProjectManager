@@ -1,9 +1,11 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
- * Classe utilitária (utility class) final para o pacote Model.
+ * Classe utilitária (utility class) estática final para o pacote Model.
  * * <p>Esta classe agrupa métodos estáticos que são usados em várias partes
  * do sistema, como geração de IDs e validações de regras de negócio.</p>
  * * <p>Ela não pode ser instanciada (possui um construtor privado)
@@ -13,6 +15,8 @@ import java.util.UUID;
  * @version 1.0
  */
 public final class AppUtils {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private AppUtils() {
         // impede a instanciação
@@ -44,6 +48,19 @@ public final class AppUtils {
      */
     public static boolean isStringNullOrEmpty(String str) {
         return str == null || str.trim().isEmpty();
+    }
+
+    /**
+     * Formata um objeto LocalDate para o padrão brasileiro (dd/MM/AAAA).
+     * Retorna "Data Inválida" se a data for nula.
+     * @param data O objeto LocalDate a ser formatado.
+     * @return A data formatada como String.
+     */
+    public static String formatarData(LocalDate data) {
+        if (data == null) {
+            return "N/A";
+        }
+        return data.format(DATE_FORMATTER);
     }
 
 }

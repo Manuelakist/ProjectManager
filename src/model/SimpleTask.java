@@ -26,6 +26,9 @@ public class SimpleTask extends Task {
 
     /**
      * Retorna uma String formatada com os detalhes específicos da Tarefa Simples.
+     * <p>
+     * Formato: "[Tarefa Simples] Descrição (Prioridade: X) - Status: STATUS"
+     * </p>
      * @return A String formatada com os detalhes da tarefa.
      */
     @Override
