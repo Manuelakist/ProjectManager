@@ -30,7 +30,7 @@ public class Milestone extends Task {
      */
     public Milestone(String description, int priority, LocalDate date)  throws IllegalArgumentException {
         super(description, priority);
-        setMilestoneDate(date);
+        this.setMilestoneDate(date);
         this.status = Status.PENDENTE;
     }
 
