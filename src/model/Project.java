@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class Project {
+public class Project implements java.io.Serializable {
 
     private final String id;
     private String name;

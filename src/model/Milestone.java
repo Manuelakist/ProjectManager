@@ -13,7 +13,7 @@ import java.time.LocalDate;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class Milestone extends Task {
+public class Milestone extends Task implements java.io.Serializable {
 
     private LocalDate milestoneDate;
 

@@ -12,7 +12,7 @@ package model;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public abstract class Task {
+public abstract class Task implements java.io.Serializable {
 
     private final String id;
     private String description;

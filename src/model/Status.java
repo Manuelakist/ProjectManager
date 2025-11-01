@@ -1,6 +1,6 @@
 package model;
 
-public enum Status {
+public enum Status implements java.io.Serializable {
 
     A_FAZER,
     EM_PROGRESSO,

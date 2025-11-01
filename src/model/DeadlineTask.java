@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class DeadlineTask extends Task {
+public class DeadlineTask extends Task implements java.io.Serializable {
 
     private LocalDate taskDeadline;
     private String assignee;

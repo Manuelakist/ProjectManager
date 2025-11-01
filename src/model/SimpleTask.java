@@ -12,7 +12,7 @@ package model;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class SimpleTask extends Task {
+public class SimpleTask extends Task implements java.io.Serializable {
 
     /**
      * Construtor para criar uma nova Tarefa Simples.

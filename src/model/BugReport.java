@@ -16,7 +16,7 @@ import java.time.LocalDate;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class BugReport extends Task {
+public class BugReport extends Task implements java.io.Serializable {
 
     private String stepsToReproduce;
     private String severity;
