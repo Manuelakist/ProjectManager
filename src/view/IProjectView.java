@@ -17,5 +17,5 @@ public interface IProjectView {
      * </p>
      */
     void displayProjectDetails();
-    
+
 }
