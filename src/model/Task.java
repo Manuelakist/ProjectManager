@@ -120,11 +120,19 @@ public abstract class Task implements java.io.Serializable {
         }
     }
 
-    // --- MÉTODO ABSTRATO ---
+    // --- MÉTODOS ABSTRATOS ---
 
     /**
      * Retorna uma String formatada com os detalhes completos da tarefa.
      * @return Uma String com os detalhes formatados para exibição.
      */
     public abstract String getDisplayDetails();
+
+    /**
+     * Retorna um array de Status que são válidos para ESTE tipo de tarefa.
+     * A View usará este método para filtrar o menu de opções
+     * e mostrar ao usuário apenas os status relevantes.
+     * @return Um array de Status válidos (ex: [A_FAZER, EM_PROGRESSO, CONCLUIDO]).
+     */
+    public abstract Status[] getValidStatuses();
 }

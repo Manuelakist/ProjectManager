@@ -94,4 +94,16 @@ public class Milestone extends Task implements java.io.Serializable {
                 this.getStatus().toString()
         );
     }
+
+    /**
+     * Retorna os status válidos para um Marco.
+     * @return Array de Status [PENDENTE, ATINGIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.PENDENTE,
+                Status.ATINGIDO
+        };
+    }
 }
