@@ -23,12 +23,16 @@ public abstract class Task implements java.io.Serializable {
      * Construtor para uma nova Task.
      * Valida os parâmetros de entrada usando os setters da própria classe.
      * O ID é gerado automaticamente e o status é inicializado como A_FAZER.
+     * @param id A identificação única da tarefa.
      * @param description A descrição da tarefa.
      * @param priority A prioridade (deve ser entre 1-5, senão assume 1).
      * @throws IllegalArgumentException Se a descrição ou prioridade forem inválidas.
      */
-    public Task(String description, int priority) throws IllegalArgumentException {
-        this.id = AppUtils.generateUniqueId();
+    public Task(String id, String description, int priority) throws IllegalArgumentException {
+        if (AppUtils.isStringNullOrEmpty(id)) {
+            throw new IllegalArgumentException("O ID não pode ser nulo ou vazio.");
+        }
+        this.id = id;
         this.setDescription(description);
         this.setPriority(priority);
         this.status = Status.A_FAZER;

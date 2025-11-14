@@ -26,14 +26,15 @@ public class BugReport extends Task implements java.io.Serializable {
      * <p>
      * Valida os parâmetros e define o status inicial padrão como {@code Status.RELATADO}.
      * </p>
+     * @param id A identificação única da tarefa.
      * @param description A descrição do bug (o que está quebrado?).
      * @param priority A prioridade para corrigir (1-5).
      * @param severity A gravidade do bug (não pode ser vazia).
      * @param steps Os passos para reproduzir (não pode ser vazio).
      * @throws IllegalArgumentException Se qualquer parâmetro for inválido.
      */
-    public BugReport(String description, int priority, String steps, String severity) throws IllegalArgumentException {
-        super(description, priority);
+    public BugReport(String id, String description, int priority, String steps, String severity) throws IllegalArgumentException {
+        super(id, description, priority);
         this.setStepsToReproduce(steps);
         this.setSeverity(severity);
         this.setStatus(Status.RELATADO);
