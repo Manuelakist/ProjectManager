@@ -122,4 +122,17 @@ public class BugReport extends Task implements java.io.Serializable {
                 this.getStatus().toString()
         );
     }
+
+    /**
+     * Retorna os status válidos para um Relatório de Bug.
+     * @return Array de Status [RELATADO, EM_CORRECAO, CORRIGIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.RELATADO,
+                Status.EM_CORRECAO,
+                Status.CORRIGIDO
+        };
+    }
 }

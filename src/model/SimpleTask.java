@@ -42,4 +42,17 @@ public class SimpleTask extends Task implements java.io.Serializable {
         );
     }
 
+    /**
+     * Retorna os status válidos para uma Tarefa Simples.
+     * @return Array de Status [A_FAZER, EM_PROGRESSO, CONCLUIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.A_FAZER,
+                Status.EM_PROGRESSO,
+                Status.CONCLUIDO
+        };
+    }
+
 }
