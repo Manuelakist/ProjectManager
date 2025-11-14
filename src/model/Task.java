@@ -100,13 +100,19 @@ public abstract class Task implements java.io.Serializable {
      * {@link SimpleTask} e {@link DeadlineTask}.
      * Ela só permite os status básicos de fluxo de trabalho.
      * @param status O novo status a ser definido.
+     * @throws IllegalArgumentException Se o status não for A_FAZER,
+     * EM_PROGRESSO, ou CONCLUIDO.
      */
-    public void setStatus(Status status) {
+    public void setStatus(Status status) throws IllegalArgumentException {
         if (status == Status.A_FAZER ||
                 status == Status.EM_PROGRESSO ||
                 status == Status.CONCLUIDO)
         {
             this.status = status;
+        } else {
+            throw new IllegalArgumentException(
+                    "Status inválido para este tipo de tarefa. Status permitidos: A_FAZER, EM_PROGRESSO, CONCLUIDO."
+            );
         }
     }
 
