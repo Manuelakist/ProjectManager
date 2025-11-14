@@ -1,6 +1,7 @@
-package view;
+package view.textual;
 
 import model.*;
+import view.IProjectView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

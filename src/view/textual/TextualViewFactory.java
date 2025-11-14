@@ -1,7 +1,10 @@
-package view;
+package view.textual;
 
 import model.Project;
 import model.ProjectManager;
+import view.IMainMenuView;
+import view.IProjectView;
+import view.IViewFactory;
 
 /**
  * Fábrica Concreta para criar componentes de UI (interface) no modo Textual (console).

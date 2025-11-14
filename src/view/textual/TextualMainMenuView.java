@@ -1,8 +1,12 @@
-package view;
+package view.textual;
 
 import model.AppUtils;
 import model.Project;
 import model.ProjectManager;
+import view.IMainMenuView;
+import view.IProjectView;
+import view.IViewFactory;
+import view.ViewFactoryProvider;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

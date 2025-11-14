@@ -1,5 +1,8 @@
 package view;
 
+import view.gui.GuiViewFactory;
+import view.textual.TextualViewFactory;
+
 /**
  * Gerenciador estático (Provider/Singleton) da Fábrica Abstrata.
  * <p>
