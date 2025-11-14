@@ -22,14 +22,14 @@ public class Milestone extends Task implements java.io.Serializable {
      * <p>
      * Valida os parâmetros e define o status inicial padrão como {@code Status.PENDENTE}.
      * </p>
-     *
+     * @param id A identificação única da tarefa.
      * @param description A descrição do marco.
      * @param priority A prioridade (1-5).
      * @param date A data do marco (não pode ser nula).
      * @throws IllegalArgumentException Se a descrição, prioridade ou data forem inválidas.
      */
-    public Milestone(String description, int priority, LocalDate date)  throws IllegalArgumentException {
-        super(description, priority);
+    public Milestone(String id, String description, int priority, LocalDate date)  throws IllegalArgumentException {
+        super(id, description, priority);
         this.setMilestoneDate(date);
         this.setStatus(Status.PENDENTE);
     }
@@ -93,5 +93,17 @@ public class Milestone extends Task implements java.io.Serializable {
                 this.getPriority(),
                 this.getStatus().toString()
         );
+    }
+
+    /**
+     * Retorna os status válidos para um Marco.
+     * @return Array de Status [PENDENTE, ATINGIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.PENDENTE,
+                Status.ATINGIDO
+        };
     }
 }

@@ -19,14 +19,15 @@ public class DeadlineTask extends Task implements java.io.Serializable {
 
     /**
      * Construtor para criar uma nova Tarefa com Prazo.
+     * @param id A identificação única da tarefa.
      * @param description A descrição da tarefa (não pode ser vazia).
      * @param priority A prioridade (1-5).
      * @param taskDeadline A data limite (não pode ser nula).
      * @param assignee O nome do responsável (não pode ser vazio).
      * @throws IllegalArgumentException Se qualquer parâmetro for inválido.
      */
-    public DeadlineTask(String description, int priority, LocalDate taskDeadline, String assignee) throws  IllegalArgumentException {
-        super(description, priority);
+    public DeadlineTask(String id, String description, int priority, LocalDate taskDeadline, String assignee) throws  IllegalArgumentException {
+        super(id, description, priority);
         this.setTaskDeadline(taskDeadline);
         this.setAssignee(assignee);
     }
@@ -95,5 +96,18 @@ public class DeadlineTask extends Task implements java.io.Serializable {
                 this.getPriority(),
                 this.getStatus().toString()
         );
+    }
+
+    /**
+     * Retorna os status válidos para uma Tarefa com Prazo.
+     * @return Array de Status [A_FAZER, EM_PROGRESSO, CONCLUIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.A_FAZER,
+                Status.EM_PROGRESSO,
+                Status.CONCLUIDO
+        };
     }
 }

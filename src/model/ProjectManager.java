@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Classe principal do Model (Façade).
@@ -19,6 +20,9 @@ public class ProjectManager {
 
     private final ArrayList<Project> projects;
     private IPersistenceDAO dao;
+    private final TaskFactory taskFactory;
+    private long nextProjectId = 1;
+    private long nextTaskId = 1;
 
     /**
      * Construtor do ProjectManager.
@@ -30,6 +34,7 @@ public class ProjectManager {
     public ProjectManager() {
         this.projects = new ArrayList<>();
         this.dao = new SerializedProjectDAO("dados.dat");
+        this.taskFactory = new TaskFactory();
     }
 
     // --- Métodos de Persistência (DAO) ---
@@ -62,6 +67,7 @@ public class ProjectManager {
             this.projects.clear();
             if (loadedProjects != null) {
                 this.projects.addAll(loadedProjects);
+                this.updateIdCountersAfterLoad();
             }
 
         } catch (Exception e) {
@@ -91,7 +97,10 @@ public class ProjectManager {
      * @throws IllegalArgumentException Se o nome ou data forem inválidos (lançado pelo construtor do Project).
      */
     public void createProject(String name, LocalDate generalDeadline) throws IllegalArgumentException {
-        Project newProject = new Project(name, generalDeadline);
+        String newId = String.valueOf(nextProjectId);
+        nextProjectId++;
+
+        Project newProject = new Project(newId, name, generalDeadline);
         this.projects.add(newProject);
     }
 
@@ -150,6 +159,63 @@ public class ProjectManager {
             return false;
         }
         return this.projects.removeIf(project -> project.getId().equals(projectId));
+    }
+
+    /**
+     * Cria uma nova tarefa (de qualquer tipo) para um projeto.
+     * Este método gera o ID, chama a TaskFactory e adiciona a
+     * tarefa criada ao projeto correto.
+     * @param projectId O ID do projeto que receberá a tarefa.
+     * @param type O tipo de tarefa (SIMPLE, DEADLINE, etc.).
+     * @param data O "mapa" de dados vindo da View.
+     * @throws IllegalArgumentException Se o projeto não for encontrado ou os dados da tarefa forem inválidos.
+     */
+    public void createTaskForProject(String projectId, TaskType type, Map<String, Object> data)
+            throws IllegalArgumentException {
+
+        Project p = this.getProjectById(projectId);
+        if (p == null) {
+            throw new IllegalArgumentException("Projeto com ID " + projectId + " não encontrado.");
+        }
+
+        String newId = String.valueOf(nextTaskId++);
+
+        Task task = this.taskFactory.createTask(newId, type, data);
+
+        p.addTask(task);
+    }
+
+    /**
+     * Método auxiliar privado para "avançar" os contadores de ID
+     * após carregar os dados de um arquivo.
+     * Isso evita colisões de ID ao criar novos itens.
+     */
+    private void updateIdCountersAfterLoad() {
+        long maxProjectId = 0;
+        long maxTaskId = 0;
+
+        for (Project p : this.projects) {
+            try {
+                long pId = Long.parseLong(p.getId());
+                if (pId > maxProjectId) {
+                    maxProjectId = pId;
+                }
+
+                for (Task t : p.getTasks()) {
+                    long tId = Long.parseLong(t.getId());
+                    if (tId > maxTaskId) {
+                        maxTaskId = tId;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                // Ignora IDs que não são numéricos
+            }
+        }
+
+        this.nextProjectId = maxProjectId + 1;
+        this.nextTaskId = maxTaskId + 1;
+
+        System.out.println("Contadores de ID atualizados: Próximo Projeto = " + nextProjectId + ", Próxima Tarefa = " + nextTaskId);
     }
 
 }
