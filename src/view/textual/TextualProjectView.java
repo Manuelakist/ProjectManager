@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Implementação Concreta (Produto Concreto) da tela de detalhes do Projeto,
@@ -127,23 +129,47 @@ public class TextualProjectView implements IProjectView {
         System.out.print("Escolha o tipo: ");
         String choice = scanner.nextLine();
 
+        Map<String, Object> data = new HashMap<>();
+        TaskType type;
+
         try {
+
+            System.out.print("Digite a descrição: ");
+            data.put("description", scanner.nextLine());
+            System.out.print("Digite a prioridade (1-5): ");
+            data.put("priority", Integer.parseInt(scanner.nextLine()));
+
             switch (choice) {
                 case "1":
-                    this.createSimpleTask();
+                    type = TaskType.SIMPLE;
                     break;
                 case "2":
-                    this.createDeadlineTask();
+                    type = TaskType.DEADLINE;
+                    System.out.print("Digite o nome do responsável (Assignee): ");
+                    data.put("assignee", scanner.nextLine());
+                    System.out.print("Digite o prazo (AAAA-MM-DD): ");
+                    data.put("deadline", LocalDate.parse(scanner.nextLine()));
                     break;
                 case "3":
-                    this.createMilestone();
+                    type = TaskType.MILESTONE;
+                    System.out.print("Digite a data do Marco (AAAA-MM-DD): ");
+                    data.put("milestoneDate", LocalDate.parse(scanner.nextLine()));
                     break;
                 case "4":
-                    this.createBugReport();
+                    type = TaskType.BUG_REPORT;
+                    System.out.print("Digite a severidade (ex: Baixa, Média, Crítica): ");
+                    data.put("severity", scanner.nextLine());
+                    System.out.print("Digite os passos para reproduzir o bug: ");
+                    data.put("steps", scanner.nextLine());
                     break;
                 default:
                     System.out.println("ERRO: Tipo de tarefa inválido.");
+                    return;
             }
+
+            this.manager.createTaskForProject(this.project.getId(), type, data);
+            System.out.println("Tarefa criada com sucesso!");
+
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println("ERRO AO CRIAR TAREFA: " + e.getMessage());
         } catch (Exception e) {
@@ -214,59 +240,4 @@ public class TextualProjectView implements IProjectView {
         }
     }
 
-    // --- MÉTODOS AUXILIARES (Helpers) para handleAddTask ---
-
-    private void createSimpleTask() {
-        System.out.print("Digite a descrição: ");
-        String desc = scanner.nextLine();
-        System.out.print("Digite a prioridade (1-5): ");
-        int prio = Integer.parseInt(scanner.nextLine());
-
-        Task task = new SimpleTask(desc, prio);
-        this.project.addTask(task);
-        System.out.println("Tarefa Simples criada com sucesso!");
-    }
-
-    private void createDeadlineTask() {
-        System.out.print("Digite a descrição: ");
-        String desc = scanner.nextLine();
-        System.out.print("Digite a prioridade (1-5): ");
-        int prio = Integer.parseInt(scanner.nextLine());
-        System.out.print("Digite o nome do responsável (Assignee): ");
-        String assignee = scanner.nextLine();
-        System.out.print("Digite o prazo (AAAA-MM-DD): ");
-        LocalDate deadline = LocalDate.parse(scanner.nextLine());
-
-        Task task = new DeadlineTask(desc, prio, deadline, assignee);
-        this.project.addTask(task);
-        System.out.println("Tarefa com Prazo criada com sucesso!");
-    }
-
-    private void createMilestone() {
-        System.out.print("Digite a descrição do Marco: ");
-        String desc = scanner.nextLine();
-        System.out.print("Digite a prioridade (1-5): ");
-        int prio = Integer.parseInt(scanner.nextLine());
-        System.out.print("Digite a data do Marco (AAAA-MM-DD): ");
-        LocalDate date = LocalDate.parse(scanner.nextLine());
-
-        Task task = new Milestone(desc, prio, date);
-        this.project.addTask(task);
-        System.out.println("Marco (Milestone) criado com sucesso!");
-    }
-
-    private void createBugReport() {
-        System.out.print("Digite a descrição do Bug: ");
-        String desc = scanner.nextLine();
-        System.out.print("Digite a prioridade (1-5): ");
-        int prio = Integer.parseInt(scanner.nextLine());
-        System.out.print("Digite a severidade (ex: Baixa, Média, Crítica): ");
-        String severity = scanner.nextLine();
-        System.out.print("Digite os passos para reproduzir o bug: ");
-        String steps = scanner.nextLine();
-
-        Task task = new BugReport(desc, prio, steps, severity);
-        this.project.addTask(task);
-        System.out.println("Relatório de Bug criado com sucesso!");
-    }
 }
