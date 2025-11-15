@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
+import model.AppUtils;
 
 /**
  * Implementação Concreta (Produto Concreto) da tela de detalhes do Projeto,
@@ -179,7 +180,7 @@ public class TextualProjectView implements IProjectView {
 
     /**
      * Lida com "3. Editar Status da Tarefa".
-     * Pede o ID da tarefa e o novo status.
+     * Pede o ID da tarefa e exibe um menu FILTRADO de opções de status.
      */
     private void handleEditTaskStatus() {
         System.out.print("\nDigite o ID da tarefa que deseja atualizar: ");
@@ -194,22 +195,22 @@ public class TextualProjectView implements IProjectView {
         System.out.println("Status atual: " + task.getStatus());
         System.out.println("Escolha o novo Status:");
 
-        Status[] allStatuses = Status.values();
+        Status[] validStatuses = task.getValidStatuses();
 
-        for (int i = 0; i < allStatuses.length; i++) {
-            System.out.printf("%d. %s\n", (i + 1), allStatuses[i]);
+        for (int i = 0; i < validStatuses.length; i++) {
+            System.out.printf("%d. %s\n", (i + 1), validStatuses[i]);
         }
         System.out.print("Digite o NÚMERO do novo status: ");
 
         try {
             int choiceIndex = Integer.parseInt(scanner.nextLine());
 
-            if (choiceIndex < 1 || choiceIndex > allStatuses.length) {
+            if (choiceIndex < 1 || choiceIndex > validStatuses.length) {
                 System.out.println("ERRO: Número de opção inválido.");
                 return;
             }
 
-            Status newStatus = allStatuses[choiceIndex - 1];
+            Status newStatus = validStatuses[choiceIndex - 1];
 
             // O próprio objeto 'task' vai validar se esse 'newStatus' é permitido para ele.
             task.setStatus(newStatus);
