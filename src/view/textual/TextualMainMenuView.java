@@ -69,6 +69,8 @@ public class TextualMainMenuView implements IMainMenuView {
         System.out.println("2. Criar novo projeto");
         System.out.println("3. Selecionar um projeto (para ver/add tarefas)");
         System.out.println("4. Salvar dados agora");
+        System.out.println("5. Editar um projeto");
+        System.out.println("6. Excluir um projeto");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -90,6 +92,12 @@ public class TextualMainMenuView implements IMainMenuView {
                 break;
             case "4":
                 this.handleSaveData();
+                break;
+            case "5":
+                this.handleUpdateProject();
+                break;
+            case "6":
+                this.handleDeleteProject();
                 break;
             case "0":
                 this.running = false;
@@ -157,13 +165,9 @@ public class TextualMainMenuView implements IMainMenuView {
      * usa a FÁBRICA ABSTRATA para criar e exibir a tela de detalhes.
      */
     private void handleSelectProject() {
-        System.out.print("\nDigite o ID do projeto que deseja gerenciar: ");
-        String projectId = scanner.nextLine();
-
-        Project project = this.manager.getProjectById(projectId);
+        Project project = this.askAndFindProjectById();
 
         if (project == null) {
-            System.out.println("ERRO: Projeto com ID '" + projectId + "' não encontrado.");
             return;
         }
 
@@ -183,5 +187,92 @@ public class TextualMainMenuView implements IMainMenuView {
     private void handleSaveData() {
         System.out.println("Salvando dados...");
         this.manager.saveData();
+    }
+
+    /**
+     * Lida com a opção "5. Editar um projeto".
+     * Pede o ID e os novos dados do projeto.
+     */
+    private void handleUpdateProject() {
+        Project project = this.askAndFindProjectById();
+
+        if (project == null) {
+            return;
+        }
+
+        try {
+            System.out.println("Editando projeto: " + project.getName());
+            System.out.print("Digite o NOVO nome: ");
+            String newName = scanner.nextLine();
+
+            System.out.print("Digite o NOVO prazo final (AAAA-MM-DD): ");
+            String dateStr = scanner.nextLine();
+            LocalDate newDeadline = LocalDate.parse(dateStr);
+
+            boolean success = this.manager.updateProject(project.getId(), newName, newDeadline);
+
+            if (success) {
+                System.out.println("Projeto atualizado com sucesso!");
+            }
+
+        } catch (DateTimeParseException e) {
+            System.out.println("ERRO: Formato de data inválido. Use AAAA-MM-DD.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERRO AO ATUALIZAR: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("ERRO inesperado: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Lida com a opção "6. Excluir um projeto".
+     * Pede o ID e a confirmação do usuário.
+     */
+    private void handleDeleteProject() {
+        Project project = this.askAndFindProjectById();
+
+        if (project == null) {
+            return;
+        }
+
+        System.out.println("Tem certeza que deseja excluir o projeto '" + project.getName() + "'?");
+        System.out.println("Isso excluirá TODAS as tarefas contidas nele.");
+        System.out.print("Digite 'SIM' para confirmar: ");
+        String confirm = scanner.nextLine().trim().toUpperCase();
+
+        if ("SIM".equals(confirm)) {
+            boolean success = this.manager.deleteProject(project.getId());
+            if (success) {
+                System.out.println("Projeto excluído com sucesso.");
+            } else {
+                System.out.println("ERRO: Falha ao excluir o projeto.");
+            }
+        } else {
+            System.out.println("Exclusão cancelada.");
+        }
+    }
+
+    /**
+     * Método auxiliar para pedir um ID e buscar um Projeto.
+     * Encapsula a lógica de "pedir, buscar, checar se é nulo e imprimir erro"
+     * @return O objeto Project se for encontrado, ou null se não for.
+     */
+    private Project askAndFindProjectById() {
+        System.out.print("\nDigite o ID do projeto: ");
+        String projectId = scanner.nextLine();
+
+        if (AppUtils.isStringNullOrEmpty(projectId)) {
+            System.out.println("ERRO: ID não pode ser vazio.");
+            return null;
+        }
+
+        Project project = this.manager.getProjectById(projectId);
+
+        if (project == null) {
+            System.out.println("ERRO: Projeto com ID '" + projectId + "' não encontrado.");
+            return null;
+        }
+
+        return project;
     }
 }
