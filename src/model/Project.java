@@ -27,13 +27,16 @@ public class Project implements java.io.Serializable {
      * Valida os parâmetros de entrada usando os setters, gera um ID único
      * e inicializa a lista de tarefas como vazia.
      * </p>
+     * @param id A identificação única da tarefa.
      * @param name O nome do projeto (não pode ser nulo ou vazio).
      * @param generalDeadline O prazo final para o projeto (não pode ser nulo).
      * @throws IllegalArgumentException Se o nome ou o prazo forem inválidos.
      */
-    public Project(String name, LocalDate generalDeadline) throws IllegalArgumentException {
-        this.id = AppUtils.generateUniqueId();
-
+    public Project(String id, String name, LocalDate generalDeadline) throws IllegalArgumentException {
+        if (AppUtils.isStringNullOrEmpty(id)) {
+            throw new IllegalArgumentException("O ID do projeto não pode ser nulo ou vazio.");
+        }
+        this.id = id;
         this.setName(name);
         this.setGeneralDeadline(generalDeadline);
 
@@ -102,9 +105,7 @@ public class Project implements java.io.Serializable {
         double concluidas = 0;
         for (Task task : tasks) {
             Status status = task.getStatus();
-            if (status == Status.CONCLUIDO ||
-                    status == Status.ATINGIDO ||
-                    status == Status.CORRIGIDO)
+            if (status == Status.CONCLUIDO || status == Status.ATINGIDO)
             {
                 concluidas++;
             }

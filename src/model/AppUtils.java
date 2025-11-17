@@ -2,13 +2,12 @@ package model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 /**
  * Classe utilitária (utility class) estática final para o pacote Model.
- * * <p>Esta classe agrupa métodos estáticos que são usados em várias partes
- * do sistema, como geração de IDs e validações de regras de negócio.</p>
- * * <p>Ela não pode ser instanciada (possui um construtor privado)
+ * <p>Esta classe agrupa métodos estáticos que são usados em várias partes
+ * do sistema, como validações de regras de negócio.</p>
+ * <p>Ela não pode ser instanciada (possui um construtor privado)
  * e não deve ser herdada (é final).</p>
  *
  * @author Manuela Skrsypcsak Kist
@@ -20,16 +19,6 @@ public final class AppUtils {
 
     private AppUtils() {
         // impede a instanciação
-    }
-
-    /**
-     * Gera um ID universalmente único (UUID).
-     * A chance de colisão é considerada zero para todos os
-     * propósitos práticos.
-     * @return Uma String de 36 caracteres única (ex: "123e4567-e89b-12d3...").
-     */
-    public static String generateUniqueId() {
-        return UUID.randomUUID().toString();
     }
 
     /**

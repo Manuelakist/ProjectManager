@@ -15,23 +15,21 @@ import java.time.LocalDate;
 public class DeadlineTask extends Task implements java.io.Serializable {
 
     private LocalDate taskDeadline;
-    private String assignee;
 
     /**
      * Construtor para criar uma nova Tarefa com Prazo.
+     * @param id A identificação única da tarefa.
      * @param description A descrição da tarefa (não pode ser vazia).
      * @param priority A prioridade (1-5).
      * @param taskDeadline A data limite (não pode ser nula).
-     * @param assignee O nome do responsável (não pode ser vazio).
      * @throws IllegalArgumentException Se qualquer parâmetro for inválido.
      */
-    public DeadlineTask(String description, int priority, LocalDate taskDeadline, String assignee) throws  IllegalArgumentException {
-        super(description, priority);
+    public DeadlineTask(String id, String description, int priority, LocalDate taskDeadline) throws  IllegalArgumentException {
+        super(id, description, priority);
         this.setTaskDeadline(taskDeadline);
-        this.setAssignee(assignee);
     }
 
-    // --- Getters ---
+    // --- Getter ---
 
     /**
      * Obtém a data limite da tarefa.
@@ -41,15 +39,7 @@ public class DeadlineTask extends Task implements java.io.Serializable {
         return taskDeadline;
     }
 
-    /**
-     * Obtém o nome do responsável pela tarefa.
-     * @return A String com o nome do responsável (assignee).
-     */
-    public String getAssignee() {
-        return assignee;
-    }
-
-    // --- Setters ---
+    // --- Setter ---
 
     /**
      * Define ou atualiza a data limite da tarefa, validando que não é nula.
@@ -64,22 +54,10 @@ public class DeadlineTask extends Task implements java.io.Serializable {
     }
 
     /**
-     * Define ou atualiza o responsável pela tarefa, validando que não é nulo ou vazio.
-     * @param assignee O nome do responsável (não pode ser nulo ou vazio).
-     * @throws IllegalArgumentException Se o nome for nulo ou vazio.
-     */
-    public void setAssignee(String assignee) throws IllegalArgumentException {
-        if (AppUtils.isStringNullOrEmpty(assignee)) {
-            throw new IllegalArgumentException("O nome do responsável (assignee) não pode ser nulo ou vazio.");
-        }
-        this.assignee = assignee;
-    }
-
-    /**
      * Retorna uma String formatada com os detalhes da Tarefa com Prazo,
      * incluindo o responsável e a data limite formatada (ex: "dd/MM/yyyy").
      * <p>
-     * Formato: "[Tarefa c/ Prazo] Descrição (Resp: Nome, Prazo: dd/MM/yyyy) (Prioridade: X) - Status: STATUS"
+     * Formato: "[Tarefa c/ Prazo] Descrição (Prazo: dd/MM/yyyy) (Prioridade: X) - Status: STATUS"
      * </p>
      * @return A String formatada com os detalhes completos da tarefa.
      */
@@ -88,12 +66,24 @@ public class DeadlineTask extends Task implements java.io.Serializable {
         String dataFormatada = AppUtils.formatarData(this.getTaskDeadline());
 
         return String.format(
-                "[Tarefa c/ Prazo] %s (Resp: %s, Prazo: %s) (Prioridade: %d) - Status: %s",
+                "[Tarefa c/ Prazo] %s (Prazo: %s) (Prioridade: %d) - Status: %s",
                 this.getDescription(),
-                this.getAssignee(),
                 dataFormatada,
                 this.getPriority(),
                 this.getStatus().toString()
         );
+    }
+
+    /**
+     * Retorna os status válidos para uma Tarefa com Prazo.
+     * @return Array de Status [A_FAZER, EM_PROGRESSO, CONCLUIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.A_FAZER,
+                Status.EM_PROGRESSO,
+                Status.CONCLUIDO
+        };
     }
 }

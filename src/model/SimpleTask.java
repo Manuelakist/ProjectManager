@@ -16,12 +16,13 @@ public class SimpleTask extends Task implements java.io.Serializable {
 
     /**
      * Construtor para criar uma nova Tarefa Simples.
+     * @param id A identificação única da tarefa.
      * @param description A descrição da tarefa (não pode ser nula ou vazia).
      * @param priority A prioridade da tarefa (deve ser entre 1-5).
      * @throws IllegalArgumentException Se a descrição ou prioridade forem inválidas (lançada pelo construtor da superclasse).
      */
-    public SimpleTask(String description, int priority) throws IllegalArgumentException {
-        super(description, priority);
+    public SimpleTask(String id, String description, int priority) throws IllegalArgumentException {
+        super(id, description, priority);
     }
 
     /**
@@ -39,6 +40,19 @@ public class SimpleTask extends Task implements java.io.Serializable {
                 this.getPriority(),
                 this.getStatus().toString()
         );
+    }
+
+    /**
+     * Retorna os status válidos para uma Tarefa Simples.
+     * @return Array de Status [A_FAZER, EM_PROGRESSO, CONCLUIDO]
+     */
+    @Override
+    public Status[] getValidStatuses() {
+        return new Status[] {
+                Status.A_FAZER,
+                Status.EM_PROGRESSO,
+                Status.CONCLUIDO
+        };
     }
 
 }

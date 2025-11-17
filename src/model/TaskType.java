@@ -1,17 +1,17 @@
 package model;
 
-public enum Status implements java.io.Serializable {
-
-    A_FAZER("A FAZER"),
-    EM_PROGRESSO("EM PROGRESSO"),
-    CONCLUIDO("CONCLUÍDO"),
-
-    PENDENTE("PENDENTE"),
-    ATINGIDO("ATINGIDO");
+public enum TaskType {
+    SIMPLE("Tarefa Simples"),
+    DEADLINE("Tarefa com Prazo"),
+    MILESTONE("Marco (Milestone)");
 
     private final String displayName;
 
-    Status(String displayName) {
+    /**
+     * Construtor privado do Enum.
+     * @param displayName O nome a ser exibido na UI.
+     */
+    TaskType(String displayName) {
         this.displayName = displayName;
     }
 
@@ -21,12 +21,10 @@ public enum Status implements java.io.Serializable {
      * Sobrescreve o método padrão toString() do Java.
      * Para retornar o nome "formatado"
      * </p>
-     * @return O nome de exibição (ex: "EM PROGRESSO").
+     * @return O nome de exibição (ex: "Tarefa Simples").
      */
     @Override
     public String toString() {
         return this.displayName;
     }
-
 }
-
