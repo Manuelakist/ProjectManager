@@ -1,7 +1,4 @@
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
-import com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkSoftIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme;
 import model.ProjectManager;
 import view.IViewFactory;
 import view.IMainMenuView;
@@ -29,9 +26,7 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-//          UIManager.setLookAndFeel(new FlatGitHubDarkIJTheme());
             UIManager.setLookAndFeel(new FlatDarkPurpleIJTheme());
-//          UIManager.setLookAndFeel(new FlatMoonlightIJTheme());
         } catch(Exception ex) {
             System.err.println("Falha ao iniciar o Look and Feel (FlatLaf).");
         }

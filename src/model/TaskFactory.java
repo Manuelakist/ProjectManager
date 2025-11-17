@@ -30,17 +30,11 @@ public class TaskFactory {
 
             case DEADLINE:
                 LocalDate deadline = (LocalDate) data.get("deadline");
-                String assignee = (String) data.get("assignee");
-                return new DeadlineTask(id, description, priority, deadline, assignee);
+                return new DeadlineTask(id, description, priority, deadline);
 
             case MILESTONE:
                 LocalDate date = (LocalDate) data.get("milestoneDate");
                 return new Milestone(id, description, priority, date);
-
-            case BUG_REPORT:
-                String severity = (String) data.get("severity");
-                String steps = (String) data.get("steps");
-                return new BugReport(id, description, priority, steps, severity);
 
             default:
                 throw new IllegalArgumentException("Tipo de tarefa desconhecido: " + type);

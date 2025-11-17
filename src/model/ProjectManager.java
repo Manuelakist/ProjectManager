@@ -33,7 +33,7 @@ public class ProjectManager {
      */
     public ProjectManager() {
         this.projects = new ArrayList<>();
-        this.dao = new SerializedProjectDAO("dados.dat");
+        this.dao = new JsonProjectDAO("dados.json");
         this.taskFactory = new TaskFactory();
     }
 

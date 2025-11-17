@@ -105,9 +105,7 @@ public class Project implements java.io.Serializable {
         double concluidas = 0;
         for (Task task : tasks) {
             Status status = task.getStatus();
-            if (status == Status.CONCLUIDO ||
-                    status == Status.ATINGIDO ||
-                    status == Status.CORRIGIDO)
+            if (status == Status.CONCLUIDO || status == Status.ATINGIDO)
             {
                 concluidas++;
             }

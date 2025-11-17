@@ -4,14 +4,24 @@ import java.util.ArrayList;
 import java.io.IOException;
 
 /**
- * Interface para a camada de Persistência de Dados (DAO).
+ * Interface (Contrato) que define o Padrão de Projeto DAO (Data Access Object)
+ * e o Padrão de Projeto Strategy (Estratégia) para a persistência de dados.
  * <p>
- * Descreve os métodos que qualquer classe de persistência (como
- * SerializedProjectDAO ou JsonProjectDAO) deve obrigatoriamente implementar.
+ * O objetivo principal desta interface é **desacoplar** (diminuir o acoplamento)
+ * a lógica de negócios (o {@link ProjectManager}) dos detalhes de
+ * implementação de *como* os dados são salvos.
  * </p>
+ * <p>
+ * O {@link ProjectManager} não "conhece" a classe {@link JsonProjectDAO}; ele conhece
+ * apenas este contrato ({@code IPersistenceDAO}). Isso permite que a
+ * estratégia de salvamento possa ser trocada no futuro (ex: para um Banco de Dados)
+ * sem que nenhuma linha de código no {@link ProjectManager} precise ser alterada.
+ * </p>
+ *
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
+
 public interface IPersistenceDAO {
 
     /**

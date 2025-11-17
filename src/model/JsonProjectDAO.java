@@ -40,6 +40,7 @@ public class JsonProjectDAO implements IPersistenceDAO {
 
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(Task.class, new TaskAdapter())
                 .setPrettyPrinting()
                 .create();
     }
@@ -86,7 +87,7 @@ public class JsonProjectDAO implements IPersistenceDAO {
         }
     }
 
-    // --- CLASSE ANINHADA ---
+    // --- CLASSES ANINHADAS ---
 
     /**
      * Classe "tradutora" (TypeAdapter) aninhada e estática para {@link LocalDate}.
@@ -126,6 +127,59 @@ public class JsonProjectDAO implements IPersistenceDAO {
                 String dateStr = jsonReader.nextString();
                 return LocalDate.parse(dateStr, formatter);
             }
+        }
+    }
+
+    /**
+     * Classe "tradutora" (TypeAdapter) que ensina o Gson a lidar
+     * com a hierarquia polimórfica (Herança) da classe abstrata Task.
+     * <p>
+     * Baseado na solução de "RuntimeTypeAdapterFactory".
+     * </p>
+     */
+    private static class TaskAdapter implements com.google.gson.JsonSerializer<Task>, com.google.gson.JsonDeserializer<Task> {
+
+        private static final String CLASS_META_KEY = "TIPO_DA_CLASSE";
+
+        /**
+         * {@inheritDoc}
+         * <p>Chamado pelo Gson para ESCREVER (serializar) um objeto Task.</p>
+         * Ele delega a serialização ao Gson e adiciona um campo de "tipo".
+         */
+        @Override
+        public com.google.gson.JsonElement serialize(Task src, java.lang.reflect.Type typeOfSrc,
+                                                     com.google.gson.JsonSerializationContext context) {
+
+            com.google.gson.JsonElement jsonElement = context.serialize(src, src.getClass());
+
+            jsonElement.getAsJsonObject().addProperty(CLASS_META_KEY, src.getClass().getName());
+
+            return jsonElement;
+        }
+
+        /**
+         * {@inheritDoc}
+         * <p>Chamado pelo Gson para LER (deserializar) um objeto Task.</p>
+         * Ele lê o campo "tipo" e usa a classe correta para carregar.
+         */
+        @Override
+        public Task deserialize(com.google.gson.JsonElement json, java.lang.reflect.Type typeOfT,
+                                com.google.gson.JsonDeserializationContext context)
+                throws com.google.gson.JsonParseException {
+
+            com.google.gson.JsonObject jsonObject = json.getAsJsonObject();
+
+            com.google.gson.JsonPrimitive prim = (com.google.gson.JsonPrimitive) jsonObject.get(CLASS_META_KEY);
+            String className = prim.getAsString();
+
+            Class<?> clazz;
+            try {
+                clazz = Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                throw new com.google.gson.JsonParseException(e);
+            }
+
+            return context.deserialize(json, clazz);
         }
     }
 
