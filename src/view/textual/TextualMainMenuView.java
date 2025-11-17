@@ -229,7 +229,7 @@ public class TextualMainMenuView implements IMainMenuView {
      * Pede o ID e a confirmação do usuário.
      */
     private void handleDeleteProject() {
-        Project project = this.askAndFindProjectById(); // <-- Chama o helper
+        Project project = this.askAndFindProjectById();
 
         if (project == null) {
             return;

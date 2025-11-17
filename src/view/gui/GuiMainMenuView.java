@@ -3,13 +3,16 @@ package view.gui;
 import model.Project;
 import model.ProjectManager;
 import view.IMainMenuView;
-import view.ProjectTableModel;
+import view.IProjectView;
+import view.IViewFactory;
+import view.ViewFactoryProvider;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -62,9 +65,6 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
         this.setVisible(true);
     }
 
-    private void createUIComponents() {
-    }
-
     /**
      * Carrega (ou recarrega) a lista de projetos do ProjectManager
      * e a exibe no componente visual JTable.
@@ -78,8 +78,9 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
         projectTable.setModel(tableModel);
 
         TableColumnModel columnModel = projectTable.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(40);
-        columnModel.getColumn(0).setMaxWidth(60);
+        columnModel.getColumn(0).setMinWidth(0);
+        columnModel.getColumn(0).setPreferredWidth(0);
+        columnModel.getColumn(0).setMaxWidth(0);
         columnModel.getColumn(2).setPreferredWidth(150);
         columnModel.getColumn(2).setMaxWidth(150);
         columnModel.getColumn(3).setPreferredWidth(80);
@@ -102,7 +103,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
      */
     private class ProjectTableRenderer extends DefaultTableCellRenderer {
 
-        private final Font boldFont = getFont().deriveFont(Font.BOLD, 18);
+        private final Font nameFont = getFont().deriveFont(Font.PLAIN, 20);
         private final Font normalFont = getFont().deriveFont(Font.PLAIN, 16);
 
         @Override
@@ -123,7 +124,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
 
                 case 1: // Coluna "Nome do Projeto"
                     setHorizontalAlignment(JLabel.LEFT);
-                    setFont(boldFont);
+                    setFont(nameFont);
                     break;
 
                 case 2: // Coluna "Prazo"
@@ -166,6 +167,32 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
         buttonSave.addActionListener(e -> {
             handleSaveData();
         });
+
+        /**
+         * Adiciona um "ouvinte" de mouse na tabela para:
+         * 1. Abrir o projeto com clique duplo.
+         * 2. Mudar o cursor para a "mãozinha" (HAND_CURSOR)
+         * quando o mouse estiver sobre a tabela.
+         */
+        projectTable.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    handleOpenProjectDetails();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());
+            }
+        });
     }
 
     /**
@@ -179,7 +206,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
                     "Novo Projeto",
                     JOptionPane.PLAIN_MESSAGE);
 
-            if (model.AppUtils.isStringNullOrEmpty(name)) { //
+            if (model.AppUtils.isStringNullOrEmpty(name)) {
                 return;
             }
 
@@ -217,47 +244,8 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
     }
 
     /**
-     * Lida com o clique no botão "Excluir Projeto".
-     * Pede o ID e a confirmação.
-     */
-    private void handleDeleteProject() {
-
-        Project selectedProject = getSelectedProjectFromTable();
-
-        if (selectedProject == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor, selecione um projeto na lista primeiro.",
-                    "Nenhum Projeto Selecionado", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String projectId = selectedProject.getId();
-        String projectName = selectedProject.getName();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Tem certeza que deseja excluir o projeto '" + projectName +
-                        "'?\nIsso excluirá TODAS as tarefas contidas nele.",
-                "Confirmar Exclusão",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            boolean success = manager.deleteProject(projectId);
-
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Projeto excluído com sucesso.",
-                        "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                loadProjectList();
-            } else {
-                JOptionPane.showMessageDialog(this, "Erro: Falha ao excluir o projeto.",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    /**
      * Lida com o clique no botão "Editar Projeto".
-     * Pede o ID e os novos dados.
+     * Pede os novos dados.
      */
     private void handleUpdateProject() {
 
@@ -314,6 +302,45 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
     }
 
     /**
+     * Lida com o clique no botão "Excluir Projeto".
+     * Pede a confirmação.
+     */
+    private void handleDeleteProject() {
+
+        Project selectedProject = getSelectedProjectFromTable();
+
+        if (selectedProject == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, selecione um projeto na lista primeiro.",
+                    "Nenhum Projeto Selecionado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String projectId = selectedProject.getId();
+        String projectName = selectedProject.getName();
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir o projeto '" + projectName +
+                        "'?\nIsso excluirá TODAS as tarefas contidas nele.",
+                "Confirmar Exclusão",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean success = manager.deleteProject(projectId);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Projeto excluído com sucesso.",
+                        "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                loadProjectList();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro: Falha ao excluir o projeto.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
      * Lida com o clique no botão "Salvar Dados".
      * Apenas chama o manager e mostra uma confirmação.
      */
@@ -330,6 +357,24 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
                     "Erro de Salvamento",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /**
+     * Lida com o clique duplo na tabela.
+     * Abre a tela de detalhes (GuiProjectView) para o projeto selecionado.
+     */
+    private void handleOpenProjectDetails() {
+
+        Project selectedProject = getSelectedProjectFromTable();
+
+        if (selectedProject == null) {
+            return;
+        }
+
+        IViewFactory factory = ViewFactoryProvider.getFactory();
+        IProjectView projectView = factory.createProjectView(this.manager, selectedProject);
+        projectView.displayProjectDetails();
+        loadProjectList();
     }
 
     /**

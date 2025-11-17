@@ -126,7 +126,6 @@ public class TextualProjectView implements IProjectView {
         System.out.println("1. Tarefa Simples");
         System.out.println("2. Tarefa com Prazo");
         System.out.println("3. Marco");
-        System.out.println("4. Relatório de Bug");
         System.out.print("Escolha o tipo: ");
         String choice = scanner.nextLine();
 
@@ -146,8 +145,6 @@ public class TextualProjectView implements IProjectView {
                     break;
                 case "2":
                     type = TaskType.DEADLINE;
-                    System.out.print("Digite o nome do responsável (Assignee): ");
-                    data.put("assignee", scanner.nextLine());
                     System.out.print("Digite o prazo (AAAA-MM-DD): ");
                     data.put("deadline", LocalDate.parse(scanner.nextLine()));
                     break;
@@ -155,13 +152,6 @@ public class TextualProjectView implements IProjectView {
                     type = TaskType.MILESTONE;
                     System.out.print("Digite a data do Marco (AAAA-MM-DD): ");
                     data.put("milestoneDate", LocalDate.parse(scanner.nextLine()));
-                    break;
-                case "4":
-                    type = TaskType.BUG_REPORT;
-                    System.out.print("Digite a severidade (ex: Baixa, Média, Crítica): ");
-                    data.put("severity", scanner.nextLine());
-                    System.out.print("Digite os passos para reproduzir o bug: ");
-                    data.put("steps", scanner.nextLine());
                     break;
                 default:
                     System.out.println("ERRO: Tipo de tarefa inválido.");
