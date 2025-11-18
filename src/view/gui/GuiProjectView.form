@@ -60,16 +60,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="9d225" class="javax.swing.JButton" binding="addTaskButton">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="-1" height="80"/>
-              </grid>
-            </constraints>
-            <properties>
-              <text value="Criar"/>
-            </properties>
-          </component>
           <component id="353a6" class="javax.swing.JButton" binding="backButton">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -98,6 +88,16 @@
             </constraints>
             <properties>
               <text value="Remover"/>
+            </properties>
+          </component>
+          <component id="9d225" class="javax.swing.JButton" binding="addTaskButton">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="80"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value="Criar"/>
             </properties>
           </component>
         </children>
