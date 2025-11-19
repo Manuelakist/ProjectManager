@@ -48,7 +48,7 @@ public class TextualProjectView implements IProjectView {
     public void displayProjectDetails() {
         while (this.running) {
             showProjectMenu();
-            String choice = scanner.nextLine();
+            String choice = scanner.nextLine().trim();
             handleMenuChoice(choice);
         }
     }
@@ -65,7 +65,7 @@ public class TextualProjectView implements IProjectView {
         System.out.println("----------------------------------------");
         System.out.println("1. Listar Tarefas");
         System.out.println("2. Adicionar Tarefa");
-        System.out.println("3. Editar Status da Tarefa");
+        System.out.println("3. Editar Tarefa");
         System.out.println("4. Excluir Tarefa");
         System.out.println("0. Voltar ao Menu Principal (Salva automaticamente)");
         System.out.print("Escolha uma opção: ");
@@ -170,7 +170,7 @@ public class TextualProjectView implements IProjectView {
 
     /**
      * Lida com "3. Editar Status da Tarefa".
-     * Pede o ID da tarefa e exibe um menu FILTRADO de opções de status.
+     * Pede o ID da tarefa e exibe um menu FILTRADO de opções.
      */
     private void handleEditTaskStatus() {
         System.out.print("\nDigite o ID da tarefa que deseja atualizar: ");
@@ -182,35 +182,103 @@ public class TextualProjectView implements IProjectView {
             return;
         }
 
+        boolean editing = true;
+
+        while (editing) {
+            System.out.println("\n--- Editando: " + task.getDescription() + " ---");
+            System.out.println("1. Editar Descrição");
+            System.out.println("2. Editar Prioridade");
+            System.out.println("3. Editar Status");
+
+            if (task instanceof DeadlineTask) {
+                System.out.println("4. Editar Prazo");
+            } else if (task instanceof Milestone) {
+                System.out.println("4. Editar Data do Marco");
+            }
+
+            System.out.println("0. Voltar (Concluir Edição)");
+            System.out.print("O que deseja alterar? ");
+
+            String choice = scanner.nextLine().trim();
+
+            try {
+                switch (choice) {
+                    case "1":
+                        System.out.print("Nova Descrição: ");
+                        String newDesc = scanner.nextLine();
+                        task.setDescription(newDesc);
+                        System.out.println("Descrição atualizada!");
+                        break;
+
+                    case "2":
+                        System.out.print("Nova Prioridade (1-5): ");
+                        int newPrio = Integer.parseInt(scanner.nextLine().trim());
+                        task.setPriority(newPrio);
+                        System.out.println("Prioridade atualizada!");
+                        break;
+
+                    case "3":
+                        this.changeTaskStatus(task);
+                        break;
+
+                    case "4":
+                        if (task instanceof DeadlineTask) {
+                            System.out.print("Novo Prazo (AAAA-MM-DD): ");
+                            LocalDate newDeadline = LocalDate.parse(scanner.nextLine());
+                            ((DeadlineTask) task).setTaskDeadline(newDeadline);
+                            System.out.println("Prazo atualizado!");
+                        } else if (task instanceof Milestone) {
+                            System.out.print("Nova Data (AAAA-MM-DD): ");
+                            LocalDate newDate = LocalDate.parse(scanner.nextLine());
+                            ((Milestone) task).setMilestoneDate(newDate);
+                            System.out.println("Data atualizada!");
+                        } else {
+                            System.out.println("Opção inválida.");
+                        }
+                        break;
+
+                    case "0":
+                        editing = false;
+                        break;
+
+                    default:
+                        System.out.println("Opção inválida.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("ERRO: Digite um número válido.");
+            } catch (DateTimeParseException e) {
+                System.out.println("ERRO: Data inválida. Use o formato AAAA-MM-DD.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("ERRO DE VALIDAÇÃO: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Método auxiliar para listar e alterar o status.
+     */
+    private void changeTaskStatus(Task task) {
         System.out.println("Status atual: " + task.getStatus());
         System.out.println("Escolha o novo Status:");
 
         Status[] validStatuses = task.getValidStatuses();
-
         for (int i = 0; i < validStatuses.length; i++) {
             System.out.printf("%d. %s\n", (i + 1), validStatuses[i]);
         }
         System.out.print("Digite o NÚMERO do novo status: ");
 
         try {
-            int choiceIndex = Integer.parseInt(scanner.nextLine());
-
+            int choiceIndex = Integer.parseInt(scanner.nextLine().trim());
             if (choiceIndex < 1 || choiceIndex > validStatuses.length) {
-                System.out.println("ERRO: Número de opção inválido.");
+                System.out.println("Número inválido.");
                 return;
             }
-
             Status newStatus = validStatuses[choiceIndex - 1];
-
-            // O próprio objeto 'task' vai validar se esse 'newStatus' é permitido para ele.
             task.setStatus(newStatus);
-
-            System.out.println("Status atualizado com sucesso!");
+            System.out.println("Status alterado para: " + newStatus);
 
         } catch (NumberFormatException e) {
-            System.out.println("ERRO: Você deve digitar um NÚMERO.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("ERRO: " + e.getMessage());
+            System.out.println("Erro: Digite um número.");
         }
     }
 
