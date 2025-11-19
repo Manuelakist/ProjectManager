@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -13,7 +14,7 @@ import java.time.LocalDate;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class Milestone extends Task implements java.io.Serializable {
+public class Milestone extends Task implements Serializable {
 
     private LocalDate milestoneDate;
 
@@ -47,7 +48,9 @@ public class Milestone extends Task implements java.io.Serializable {
     // --- Setters ---
 
     /**
-     * Define ou atualiza a data do marco, validando que não é nula.
+     * Define ou atualiza a data do marco, validando que não é nula
+     * (pode ser uma data passada caso o usuário queira registrar tarefas anteriores
+     * para manter um histórico).
      * @param milestoneDate A data (não pode ser nula).
      * @throws IllegalArgumentException Se a data for nula.
      */

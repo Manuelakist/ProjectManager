@@ -12,7 +12,7 @@ import java.io.IOException;
  * implementação de *como* os dados são salvos.
  * </p>
  * <p>
- * O {@link ProjectManager} não "conhece" a classe {@link JsonProjectDAO}; ele conhece
+ * O {@link ProjectManager} não "conhece" a classe {@link SerializedProjectDAO}; ele conhece
  * apenas este contrato ({@code IPersistenceDAO}). Isso permite que a
  * estratégia de salvamento possa ser trocada no futuro (ex: para um Banco de Dados)
  * sem que nenhuma linha de código no {@link ProjectManager} precise ser alterada.
@@ -28,7 +28,7 @@ public interface IPersistenceDAO {
      * Salva a lista completa de projetos em uma fonte de dados (ex: arquivo).
      * @param projects A {@link ArrayList} de {@link Project}s a ser salva.
      * @throws IOException Se ocorrer um erro de escrita no disco.
-     * @throws Exception Se ocorrer qualquer outro erro (ex: falha na serialização/JSON).
+     * @throws Exception Se ocorrer qualquer outro erro (ex: falha na serialização).
      */
     void save(ArrayList<Project> projects) throws Exception;
 
@@ -42,7 +42,7 @@ public interface IPersistenceDAO {
      * @throws IOException Se ocorrer um erro de leitura do disco.
      * @throws ClassNotFoundException Se (no caso da serialização) a classe
      * de um objeto salvo não for encontrada.
-     * @throws Exception Se ocorrer qualquer outro erro (ex: JSON mal formatado).
+     * @throws Exception Se ocorrer qualquer outro erro.
      */
     ArrayList<Project> load() throws Exception;
 }

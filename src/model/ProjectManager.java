@@ -33,26 +33,11 @@ public class ProjectManager {
      */
     public ProjectManager() {
         this.projects = new ArrayList<>();
-        this.dao = new JsonProjectDAO("dados.json");
+        this.dao = new SerializedProjectDAO("dados.dat");
         this.taskFactory = new TaskFactory();
     }
 
     // --- Métodos de Persistência (DAO) ---
-
-    /**
-     * Define (ou troca) a estratégia de persistência a ser usada.
-     * A view pode usar isso para permitir que o usuário escolha
-     * entre salvar como .json ou .dat.
-     * @param dao A instância do DAO a ser usada (não pode ser nula).
-     * @throws IllegalArgumentException Se o DAO for nulo.
-     */
-    public void setPersistenceStrategy(IPersistenceDAO dao) throws IllegalArgumentException {
-        if (dao == null) {
-            throw new IllegalArgumentException("A estratégia de persistência (DAO) não pode ser nula.");
-        }
-        this.dao = dao;
-    }
-
     /**
      * Carrega a lista de projetos do arquivo usando a estratégia de DAO atual.
      * <p>
