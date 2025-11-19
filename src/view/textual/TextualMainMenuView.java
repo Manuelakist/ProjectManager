@@ -50,13 +50,11 @@ public class TextualMainMenuView implements IMainMenuView {
 
         while (this.running) {
             showMenuOptions();
-            String choice = scanner.nextLine();
+            String choice = scanner.nextLine().trim();
             handleMenuChoice(choice);
         }
 
-        System.out.println("\nSalvando dados antes de sair...");
-        this.handleSaveData();
-        System.out.println("Programa finalizado. Adeus!");
+        System.out.println("Programa finalizado.");
         this.scanner.close();
     }
 
@@ -67,7 +65,7 @@ public class TextualMainMenuView implements IMainMenuView {
         System.out.println("\n--- MENU PRINCIPAL ---");
         System.out.println("1. Listar todos os projetos");
         System.out.println("2. Criar novo projeto");
-        System.out.println("3. Selecionar um projeto (para ver/add tarefas)");
+        System.out.println("3. Selecionar um projeto (para ver/adicionar tarefas)");
         System.out.println("4. Salvar dados agora");
         System.out.println("5. Editar um projeto");
         System.out.println("6. Excluir um projeto");
@@ -100,7 +98,7 @@ public class TextualMainMenuView implements IMainMenuView {
                 this.handleDeleteProject();
                 break;
             case "0":
-                this.running = false;
+                this.handleExit();
                 break;
             default:
                 System.out.println("ERRO: Opção inválida. Tente novamente.");
@@ -253,13 +251,34 @@ public class TextualMainMenuView implements IMainMenuView {
     }
 
     /**
+     * Lida com a opção "0. Sair".
+     * Pede se o usuário deseja salvar antes de sair.
+     */
+    private void handleExit() {
+        System.out.println("1. Salvar dados e sair.");
+        System.out.println("2. Sair sem salvar.");
+        System.out.print("Escolha a opção desejada: ");
+        String choice = scanner.nextLine().trim();
+
+        switch (choice) {
+            case "1":
+                handleSaveData();
+            case "2":
+                this.running = false;
+                break;
+            default:
+                System.out.println("ERRO: Opção inválida. Tente novamente.");
+        }
+    }
+
+    /**
      * Método auxiliar para pedir um ID e buscar um Projeto.
      * Encapsula a lógica de "pedir, buscar, checar se é nulo e imprimir erro"
      * @return O objeto Project se for encontrado, ou null se não for.
      */
     private Project askAndFindProjectById() {
         System.out.print("\nDigite o ID do projeto: ");
-        String projectId = scanner.nextLine();
+        String projectId = scanner.nextLine().trim();
 
         if (AppUtils.isStringNullOrEmpty(projectId)) {
             System.out.println("ERRO: ID não pode ser vazio.");
