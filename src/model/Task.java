@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Classe abstrata que representa uma unidade de trabalho genérica (Tarefa).
  * <p>
@@ -12,7 +14,7 @@ package model;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public abstract class Task implements java.io.Serializable {
+public abstract class Task implements Serializable {
 
     private final String id;
     private String description;
@@ -75,13 +77,13 @@ public abstract class Task implements java.io.Serializable {
     // --- SETTERS ---
 
     /**
-     * Atualiza a descrição da tarefa após validar que não é nula ou vazia.
+     * Atualiza a descrição da tarefa após validar que não é nula ou vazia e tem até 100 caracteres.
      * @param description A nova descrição.
      * @throws IllegalArgumentException Se a descrição for inválida.
      */
     public void setDescription(String description) throws IllegalArgumentException {
-        if (AppUtils.isStringNullOrEmpty(description)) {
-            throw new IllegalArgumentException("A descrição da tarefa não pode ser nula ou vazia.");
+        if (AppUtils.isInvalidLength(description, 100)) {
+            throw new IllegalArgumentException("A descrição da tarefa não pode ser nula, vazia ou maior que 100 caracteres.");
         }
         this.description = description;
     }

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDate;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class DeadlineTask extends Task implements java.io.Serializable {
+public class DeadlineTask extends Task implements Serializable {
 
     private LocalDate taskDeadline;
 
@@ -42,13 +43,15 @@ public class DeadlineTask extends Task implements java.io.Serializable {
     // --- Setter ---
 
     /**
-     * Define ou atualiza a data limite da tarefa, validando que não é nula.
+     * Define ou atualiza a data limite da tarefa, validando que não é nula
+     * (pode ser uma data passada caso o usuário queira registrar tarefas anteriores
+     * para manter um histórico).
      * @param taskDeadline A data limite (não pode ser nula).
      * @throws IllegalArgumentException Se a data for nula.
      */
     public void setTaskDeadline(LocalDate taskDeadline) throws IllegalArgumentException {
         if (taskDeadline == null) {
-            throw new IllegalArgumentException("A data limite da tarefa não pode ser nula");
+            throw new IllegalArgumentException("A data limite da tarefa não pode ser nula.");
         }
         this.taskDeadline = taskDeadline;
     }

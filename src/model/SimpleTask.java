@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Representa uma tarefa simples, a implementação mais básica de uma {@link Task}.
  * <p>
@@ -12,7 +14,7 @@ package model;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class SimpleTask extends Task implements java.io.Serializable {
+public class SimpleTask extends Task implements Serializable {
 
     /**
      * Construtor para criar uma nova Tarefa Simples.

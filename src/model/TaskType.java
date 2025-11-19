@@ -1,6 +1,8 @@
 package model;
 
-public enum TaskType {
+import java.io.Serializable;
+
+public enum TaskType implements Serializable {
     SIMPLE("Tarefa Simples"),
     DEADLINE("Tarefa com Prazo"),
     MILESTONE("Marco (Milestone)");

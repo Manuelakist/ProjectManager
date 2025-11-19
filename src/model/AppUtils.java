@@ -40,7 +40,7 @@ public final class AppUtils {
     }
 
     /**
-     * Formata um objeto LocalDate para o padrão brasileiro (dd/MM/AAAA).
+     * Formata um objeto {@link LocalDate} para o padrão brasileiro (dd/MM/AAAA).
      * Retorna "Data Inválida" se a data for nula.
      * @param data O objeto LocalDate a ser formatado.
      * @return A data formatada como String.
@@ -50,6 +50,28 @@ public final class AppUtils {
             return "N/A";
         }
         return data.format(DATE_FORMATTER);
+    }
+
+    /**
+     * Valida se um objeto {@link LocalDate} representa uma data futura e é não nula.
+     * <p>O setter do objeto {@link Project} utiliza esse método
+     * para garantir que não sejam definidos projetos para o passado.</p>
+     * @param date O objeto LocalDate a ser checado
+     * @return true se a data for no passado, false caso contrário
+     */
+    public static boolean isDateInPast(LocalDate date) {
+        return date == null || date.isBefore(LocalDate.now());
+    }
+
+    /**
+     * Valida se uma String é menor que um tamanho máximo recebido
+     * e chama {@code IsStringNullOrEmpty()} para garantir que ela não é nula ou vazia.
+     * @param str A String a ser checada
+     * @param max o comprimento máximo da String
+     * @return true se a String é menor que o tamanho máximo (e não nula ou vazia), false caso contrário
+     */
+    public static boolean isInvalidLength(String str, int max) {
+        return isStringNullOrEmpty(str) || str.length() > max;
     }
 
 }

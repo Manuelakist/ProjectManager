@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  * @author Manuela Skrsypcsak Kist
  * @version 1.0
  */
-public class Project implements java.io.Serializable {
+public class Project implements Serializable {
 
     private final String id;
     private String name;
@@ -151,25 +152,25 @@ public class Project implements java.io.Serializable {
     // --- SETTERS ---
 
     /**
-     * Define o nome do projeto, validando que não é nulo ou vazio.
+     * Define o nome do projeto, validando que não é nulo ou vazio e tem até 50 caracteres.
      * @param name O novo nome para o projeto.
      * @throws IllegalArgumentException Se o nome for nulo ou vazio.
      */
     public void setName(String name) throws IllegalArgumentException {
-        if (AppUtils.isStringNullOrEmpty(name)) {
-            throw new IllegalArgumentException("O nome do projeto não pode ser nulo ou vazio.");
+        if (AppUtils.isInvalidLength(name, 50)) {
+            throw new IllegalArgumentException("O nome do projeto não pode ser nulo, vazio ou maior que 50 caracteres.");
         }
         this.name = name;
     }
 
     /**
-     * Define a data limite geral do projeto, validando que não é nula.
+     * Define a data limite geral do projeto, validando que não é nula ou passada.
      * @param generalDeadline A nova data limite.
-     * @throws IllegalArgumentException Se a data for nula.
+     * @throws IllegalArgumentException Se a data for nula ou passada.
      */
     public void setGeneralDeadline(LocalDate generalDeadline) throws IllegalArgumentException {
-        if (generalDeadline == null) {
-            throw new IllegalArgumentException("A data limite geral do projeto não pode ser nula.");
+        if (AppUtils.isDateInPast(generalDeadline)) {
+            throw new IllegalArgumentException("A data não pode ser nula nem estar no passado.");
         }
         this.generalDeadline = generalDeadline;
     }
