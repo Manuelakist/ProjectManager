@@ -4,7 +4,7 @@ Este é um sistema completo de Gerenciamento de Projetos desenvolvido em Java co
 
 O objetivo principal deste projeto foi construir uma aplicação robusta do zero, demonstrando domínio prático de arquitetura de software, separação de responsabilidades e aplicação correta de múltiplos Padrões de Projeto (Design Patterns).
 
-## 🎯 O que ele faz?
+## O que ele faz?
 
 O sistema permite o gerenciamento completo de múltiplos projetos e suas tarefas:
 * **CRUD de Projetos:** Criar, editar, excluir e listar projetos com prazos definidos.
@@ -12,7 +12,7 @@ O sistema permite o gerenciamento completo de múltiplos projetos e suas tarefas
 * **Cálculo Automático:** Acompanhamento em tempo real do progresso do projeto (% concluída).
 * **Persistência:** Todos os dados são salvos e carregados automaticamente em um arquivo binário (`dados.dat`) usando Serialização Java.
 
-## 🏗️ Arquitetura e Padrões de Projeto
+## Arquitetura e Padrões de Projeto
 
 O projeto foi construído seguindo uma arquitetura inspirada no **MVC (Model-View-Controller)**, com uma separação estrita entre a lógica de negócio (`model`) e a interface de usuário (`view`).
 
@@ -38,7 +38,7 @@ Os seguintes Padrões de Projeto foram aplicados:
     * **Onde:** `ProjectManager`.
     * **Por que:** Esta classe atua como a única porta de entrada para o pacote `model`. A `view` não interage diretamente com listas internas ou DAOs; ela solicita tudo ao "Gerente", que orquestra as operações.
 
-## ✅ Cumprimento dos Requisitos Mínimos
+## Cumprimento dos Requisitos Mínimos
 
 Abaixo está o detalhamento de como cada requisito obrigatório da avaliação foi atendido:
 
@@ -56,7 +56,7 @@ Abaixo está o detalhamento de como cada requisito obrigatório da avaliação f
 * **Herança e Polimorfismo:**
     * O sistema trata todas as tarefas de forma polimórfica. O método `getProgressPercentage()` do Projeto itera sobre uma lista genérica de `Task` sem precisar saber qual é a subclasse específica. A interface também usa polimorfismo para exibir detalhes específicos de cada tarefa na tabela.
 
-## 📸 Demonstração do Projeto
+## Demonstração do Projeto
 
 O sistema é flexível e pode ser executado em dois modos.
 
@@ -67,6 +67,7 @@ Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer uma experiência vi
 ![Menu Principal Gráfico](docs/mainMenu.png)
 
 #### Detalhes do Projeto (Gerenciamento de Tarefas)
+Pode ser acessado clicando duas vezes em um projeto.
 ![Detalhes do Projeto Gráfico](docs/project.png)
 
 ---
@@ -112,13 +113,13 @@ Progresso: 50% | Prazo: 01/12/2025
 
 ---
 
-## 🧩 Diagrama UML
+## Diagrama UML
 A estrutura de classes do projeto pode ser visualizada abaixo:
 ![Diagrama UML](docs/diagramaUML.png)
 
 ---
 
-## 🚀 Como Executar
+## Como Executar
 
 1.  **Pré-requisitos:** Ter o Java (JDK 11 ou superior) instalado.
 2.  **Bibliotecas:** O projeto depende da biblioteca `FlatLaf` (para o tema visual). O arquivo `.jar` já está incluso na pasta `lib/` e configurado no projeto.
