@@ -64,7 +64,7 @@ O sistema é flexível e pode ser executado em dois modos.
 Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer uma experiência visual moderna.
 
 #### Menu Principal (Lista de Projetos)
-![Menu Principal Gráfico](docS/mainMenu.png)
+![Menu Principal Gráfico](docs/mainMenu.png)
 
 #### Detalhes do Projeto (Gerenciamento de Tarefas)
 ![Detalhes do Projeto Gráfico](docs/project.png)
