@@ -1,64 +1,134 @@
 # Gerenciador de Projetos Pessoal
 
-Este é um Gerenciador de Projetos Pessoal feito em Java, desenvolvido como trabalho final para a disciplina de Programação Orientada a Objetos.
+Este é um sistema completo de Gerenciamento de Projetos desenvolvido em Java como trabalho final para a disciplina de Programação Orientada a Objetos.
 
-O objetivo principal era construir um sistema completo do zero, aplicando de forma correta os conceitos de POO, arquitetura de software e padrões de projeto.
+O objetivo principal deste projeto foi construir uma aplicação robusta do zero, demonstrando domínio prático de arquitetura de software, separação de responsabilidades e aplicação correta de múltiplos Padrões de Projeto (Design Patterns).
 
-## O que ele faz?
+## 🎯 O que ele faz?
 
-O sistema é um gerenciador de tarefas básico, onde você pode:
-* Criar, editar e excluir **Projetos**.
-* Dentro de um projeto, adicionar, editar e excluir **Tarefas**.
-* Acompanhar o progresso de um projeto (calculado em % de tarefas concluídas).
-* Salvar e carregar todos os seus projetos e tarefas em um arquivo.
+O sistema permite o gerenciamento completo de múltiplos projetos e suas tarefas:
+* **CRUD de Projetos:** Criar, editar, excluir e listar projetos com prazos definidos.
+* **CRUD de Tarefas:** Adicionar e gerenciar diferentes tipos de tarefas dentro de cada projeto.
+* **Cálculo Automático:** Acompanhamento em tempo real do progresso do projeto (% concluída).
+* **Persistência:** Todos os dados são salvos e carregados automaticamente em um arquivo binário (`dados.dat`) usando Serialização Java.
 
-## Arquitetura e Padrões de Projeto
+## 🏗️ Arquitetura e Padrões de Projeto
 
-O mais importante do trabalho é a *forma* como ele foi construído.
+O projeto foi construído seguindo uma arquitetura inspirada no **MVC (Model-View-Controller)**, com uma separação estrita entre a lógica de negócio (`model`) e a interface de usuário (`view`).
 
-1.  **Separação Model-View:**
-    O projeto é dividido em dois pacotes principais: `model` (com toda a lógica de negócio, sem NENHUMA interação com o usuário) e `view` (com as telas). 
+Os seguintes Padrões de Projeto foram aplicados:
 
-2.  **Padrão Abstract Factory (Fábrica Abstrata):**
-    O sistema pode rodar de dois jeitos: com uma **interface gráfica (Swing)** ou com uma **interface textual (console)**. Para fazer essa troca de forma limpa, foi usado o padrão Abstract Factory (`IViewFactory`). O `Main.java` só precisa mudar uma linha na `ViewFactoryProvider` para trocar a aplicação inteira.
+1.  **Abstract Factory (Fábrica Abstrata)**
+    * **Onde:** Pacote `view` (`IViewFactory`, `ViewFactoryProvider`).
+    * **Por que:** Permite que o sistema inicie com duas interfaces completamente distintas (**Gráfica/Swing** ou **Textual/Console**) mudando apenas uma linha de configuração no `Main.java`. O sistema não fica acoplado a uma implementação específica de UI.
 
-3.  **Padrão DAO e Strategy (Estratégia):**
-    A lógica de salvar e carregar os dados foi separada com uma interface (`IPersistenceDAO`). Isso desacopla o `ProjectManager` (a lógica de negócio) do "como" os dados são salvos (Padrão Strategy). A implementação atual (`JsonProjectDAO`) usa JSON, mas a interface permite que o `ProjectManager` não precise saber desse detalhe.
+2.  **Singleton (Único)**
+    * **Onde:** `ViewFactoryProvider` (no pacote `view`).
+    * **Por que:** Garante que exista apenas uma única instância da fábrica de interface (`IViewFactory`) ativa durante toda a execução do programa. O `Main.java` configura essa instância uma vez, e qualquer parte do sistema pode acessá-la globalmente para criar novas telas, sem precisar passar referências manualmente.
 
-4.  **Herança e Polimorfismo:**
-    Este é o principal conceito de POO aplicado. Existe uma classe abstrata `Task` que serve de base para **3 tipos** diferentes de tarefas:
-    * `SimpleTask` (uma tarefa básica)
-    * `DeadlineTask` (tem data de entrega)
-    * `Milestone` (um marco importante do projeto)
+3.  **DAO (Data Access Object) e Strategy**
+    * **Onde:** `IPersistenceDAO` e `SerializedProjectDAO`.
+    * **Por que:** A interface `IPersistenceDAO` define um contrato (Strategy) para salvar os dados. O `ProjectManager` não sabe *como* os dados são salvos, ele apenas usa a estratégia fornecida. Neste projeto, utilizamos a **Serialização Nativa do Java** (`SerializedProjectDAO`) para persistir o estado completo dos objetos de forma eficiente, conforme visto em aula.
 
-    O `Project` simplesmente armazena um `ArrayList<Task>`, e graças ao polimorfismo, ele consegue lidar com todos os tipos de tarefa (por exemplo, no método `getProgressPercentage()`).
+4.  **Factory Method (Fábrica Simples)**
+    * **Onde:** `TaskFactory` no pacote `model`.
+    * **Por que:** Centraliza a lógica complexa de criação dos diferentes tipos de tarefas (`SimpleTask`, `DeadlineTask`, `Milestone`). O gerenciador apenas solicita uma tarefa do tipo "X" com os dados "Y", sem precisar conhecer os construtores específicos.
 
-5.  **Padrão Factory (Fábrica):**
-    Para não "sujar" o `ProjectManager` com a lógica de criação de *quais* tarefas existem (`new SimpleTask`, `new DeadlineTask`...), foi usada uma `TaskFactory`. A `view` (interface) só precisa dizer o `TaskType` (um enum), e a fábrica cuida da construção.
+5.  **Façade (Fachada)**
+    * **Onde:** `ProjectManager`.
+    * **Por que:** Esta classe atua como a única porta de entrada para o pacote `model`. A `view` não interage diretamente com listas internas ou DAOs; ela solicita tudo ao "Gerente", que orquestra as operações.
 
-6.  **GUI com TableModel (Padrão Adapter):**
-    A interface gráfica (Swing) usa `JTable`s para exibir os dados. A lógica de "adaptar" os objetos `Project` e `Task` para a tabela é feita pelas classes `ProjectTableModel` e `TaskTableModel`, mantendo a `view.gui` limpa.
+## ✅ Cumprimento dos Requisitos Mínimos
 
-## Bibliotecas Externas
+Abaixo está o detalhamento de como cada requisito obrigatório da avaliação foi atendido:
 
-* **Gson (Google):** Usada pelo `JsonProjectDAO` para serializar (salvar) e deserializar (carregar) os projetos e tarefas no formato JSON.
-* **FlatLaf:** Usada para o "Look and Feel" (aparência) da interface Swing (Dark Purple).
+* **Pelo menos uma Interface:**
+    * Foram utilizadas várias, sendo as principais `IPersistenceDAO` (Persistência) e `IViewFactory` (Fábrica de UI).
+* **Pelo menos uma Classe Abstrata:**
+    * A classe `Task` é abstrata e define o contrato base para todas as tarefas (id, descrição, status, prioridade).
+* **Pelo menos uma Classe Estática:**
+    * A classe `AppUtils` é uma classe utilitária estática final (`final`, construtor privado) usada para validações e formatação de dados em todo o sistema.
+* **Duas implementações concretas por Interface/Abstrata:**
+    * A classe abstrata `Task` possui **3 implementações**: `SimpleTask`, `DeadlineTask` e `Milestone`.
+    * A interface `IViewFactory` possui **2 implementações**: `GuiViewFactory` e `TextualViewFactory`.
+* **Encapsulamento:**
+    * Todos os atributos são `private`. O acesso e modificação são feitos estritamente via Getters e Setters com validação de dados (ex: não permitir datas nulas ou nomes vazios).
+* **Herança e Polimorfismo:**
+    * O sistema trata todas as tarefas de forma polimórfica. O método `getProgressPercentage()` do Projeto itera sobre uma lista genérica de `Task` sem precisar saber qual é a subclasse específica. A interface também usa polimorfismo para exibir detalhes específicos de cada tarefa na tabela.
 
-## Diagrama UML
+## 📸 Demonstração do Projeto
 
-Abaixo está o diagrama de classes que mostra a estrutura do projeto.
+O sistema é flexível e pode ser executado em dois modos.
+
+### 1. Interface Gráfica (Swing com FlatLaf)
+Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer uma experiência visual moderna.
+
+#### Menu Principal (Lista de Projetos)
+![Menu Principal Gráfico](docS/mainMenu.png)
+
+#### Detalhes do Projeto (Gerenciamento de Tarefas)
+![Detalhes do Projeto Gráfico](docs/project.png)
 
 ---
 
-![Diagrama de Classes](docs/diagramaUML.png)
+### 2. Interface Textual (Console)
+Uma interface robusta e completa via linha de comando, ideal para ambientes sem suporte gráfico.
+
+#### Menu Principal
+O usuário navega através de opções numéricas.
+```text
+Bem-vindo ao Gerenciador de Projetos!
+
+--- MENU PRINCIPAL ---
+1. Listar todos os projetos
+2. Criar novo projeto
+3. Selecionar um projeto (para ver/add tarefas)
+4. Salvar dados agora
+5. Editar um projeto
+6. Excluir um projeto
+0. Sair
+Escolha uma opção:
+```
+
+#### Listagem e Detalhes
+A visualização textual também formata os dados (datas, progresso) para facilitar a leitura.
+
+```text
+--- Seus Projetos ---
+ID: 1 (50%) | Trabalho da Faculdade (Prazo: 01/12/2025)
+ID: 2 (0%)  | Reforma do Quarto (Prazo: 15/01/2026)
+
+Digite o ID do projeto que deseja gerenciar: 1
+
+Entrando no projeto: Trabalho da Faculdade...
+
+--- Gerenciando Projeto: Trabalho da Faculdade ---
+Progresso: 50% | Prazo: 01/12/2025
+----------------------------------------
+1. Listar Tarefas
+2. Adicionar Tarefa
+...
+```
 
 ---
 
-## Como Executar
+## 🧩 Diagrama UML
+A estrutura de classes do projeto pode ser visualizada abaixo:
+![Diagrama UML](docs/diagramaUML.png)
 
-1.  Clone o repositório.
-2.  Abra o projeto na sua IDE (ex: IntelliJ). As bibliotecas (`.jar`) já estão na pasta `lib` e configuradas no `.iml`.
-3.  Para escolher a interface, vá em `Main.java` e mude a string de configuração:
-    * `ViewFactoryProvider.configure("gui");` (para a interface gráfica Swing)
-    * `ViewFactoryProvider.configure("textual");` (para a interface de console)
-4.  Execute o `Main.java`.
+---
+
+## 🚀 Como Executar
+
+1.  **Pré-requisitos:** Ter o Java (JDK 11 ou superior) instalado.
+2.  **Bibliotecas:** O projeto depende da biblioteca `FlatLaf` (para o tema visual). O arquivo `.jar` já está incluso na pasta `lib/` e configurado no projeto.
+3.  **Executando no IntelliJ:**
+    * Abra a pasta do projeto.
+    * Execute a classe `src/Main.java`.
+    * Para carregar o projeto com os dados de exemplo, o arquivo `dados.dat` deve estar imediatamente dentro da pasta mais externa em que o projeto for executado.
+4.  **Alternando entre Texto e Gráfico:**
+    * Para mudar a interface, edite o arquivo `src/Main.java`:
+    ```java
+    // Use "gui" para Interface Gráfica ou "textual" para Console
+    ViewFactoryProvider.configure("gui");
+    ```
