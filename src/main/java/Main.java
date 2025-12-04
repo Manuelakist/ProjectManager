@@ -1,10 +1,17 @@
 import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
+import model.Project;
 import model.ProjectManager;
+import model.SimpleTask;
 import view.IViewFactory;
 import view.IMainMenuView;
 import view.ViewFactoryProvider;
+import model.*;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Ponto de entrada da aplicação.
@@ -38,7 +45,7 @@ public class Main {
         try {
             // Para a interface textual: "textual"
             // Para a interface gráfica: "gui"
-            ViewFactoryProvider.configure("gui");
+            ViewFactoryProvider.configure("textual");
 
             IViewFactory factory = ViewFactoryProvider.getFactory();
 
