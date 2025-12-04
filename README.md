@@ -1,5 +1,7 @@
 # Gerenciador de Projetos Pessoal
 
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Manuelakist/ProjectManager-black?logo=github)](https://github.com/Manuelakist/ProjectManager)
+
 Este é um sistema completo de Gerenciamento de Projetos desenvolvido em Java como trabalho final para a disciplina de Programação Orientada a Objetos.
 
 O objetivo principal deste projeto foi construir uma aplicação robusta do zero, demonstrando domínio prático de arquitetura de software, separação de responsabilidades e aplicação correta de múltiplos Padrões de Projeto (Design Patterns).
@@ -11,6 +13,7 @@ O sistema permite o gerenciamento completo de múltiplos projetos e suas tarefas
 * **CRUD de Tarefas:** Adicionar e gerenciar diferentes tipos de tarefas dentro de cada projeto.
 * **Cálculo Automático:** Acompanhamento em tempo real do progresso do projeto (% concluída).
 * **Persistência:** Todos os dados são salvos e carregados automaticamente em um arquivo binário (`dados.dat`) usando Serialização Java.
+* **Importação de Dados:** Funcionalidade para importar projetos de arquivos externos de backup (`.dat`) através de um seletor de arquivos.
 
 ## Arquitetura e Padrões de Projeto
 
@@ -28,7 +31,7 @@ Os seguintes Padrões de Projeto foram aplicados:
 
 3.  **DAO (Data Access Object) e Strategy**
     * **Onde:** `IPersistenceDAO` e `SerializedProjectDAO`.
-    * **Por que:** A interface `IPersistenceDAO` define um contrato (Strategy) para salvar os dados. O `ProjectManager` não sabe *como* os dados são salvos, ele apenas usa a estratégia fornecida. Neste projeto, utilizamos a **Serialização Nativa do Java** (`SerializedProjectDAO`) para persistir o estado completo dos objetos de forma eficiente, conforme visto em aula.
+    * **Por que:** A interface `IPersistenceDAO` define um contrato (Strategy) para salvar os dados. O `ProjectManager` não sabe *como* os dados são salvos, ele apenas usa a estratégia fornecida. Neste projeto, utilizamos a **Serialização Nativa do Java** (`SerializedProjectDAO`) para persistir o estado completo dos objetos de forma eficiente.
 
 4.  **Factory Method (Fábrica Simples)**
     * **Onde:** `TaskFactory` no pacote `model`.
@@ -55,6 +58,8 @@ Abaixo está o detalhamento de como cada requisito obrigatório da avaliação f
     * Todos os atributos são `private`. O acesso e modificação são feitos estritamente via Getters e Setters com validação de dados (ex: não permitir datas nulas ou nomes vazios).
 * **Herança e Polimorfismo:**
     * O sistema trata todas as tarefas de forma polimórfica. O método `getProgressPercentage()` do Projeto itera sobre uma lista genérica de `Task` sem precisar saber qual é a subclasse específica. A interface também usa polimorfismo para exibir detalhes específicos de cada tarefa na tabela.
+* **Manipulação de Arquivos e I/O:**
+    * O sistema implementa a leitura de arquivos externos utilizando `JFileChooser` na interface gráfica e entrada de caminho no console, permitindo importar dados de backups localizados fora da pasta do projeto.
 
 ## Demonstração do Projeto
 
@@ -67,7 +72,6 @@ Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer uma experiência vi
 ![Menu Principal Gráfico](docs/mainMenu.png)
 
 #### Detalhes do Projeto (Gerenciamento de Tarefas)
-Pode ser acessado clicando duas vezes em um projeto.
 ![Detalhes do Projeto Gráfico](docs/project.png)
 
 ---
@@ -87,8 +91,9 @@ Bem-vindo ao Gerenciador de Projetos!
 4. Salvar dados agora
 5. Editar um projeto
 6. Excluir um projeto
+7. Importar projetos de arquivo externo
 0. Sair
-Escolha uma opção:
+Escolha uma opção: _
 ```
 
 #### Listagem e Detalhes
@@ -122,14 +127,15 @@ A estrutura de classes do projeto pode ser visualizada abaixo:
 ## Como Executar
 
 1.  **Pré-requisitos:** Ter o Java (JDK 11 ou superior) instalado.
-2.  **Bibliotecas:** O projeto depende da biblioteca `FlatLaf` (para o tema visual). O arquivo `.jar` já está incluso na pasta `lib/` e configurado no projeto.
+2.  **Bibliotecas:** O projeto depende da biblioteca `FlatLaf` (para o tema visual). O arquivo `.jar` já está configurado no projeto.
 3.  **Executando no IntelliJ:**
     * Abra a pasta do projeto.
-    * Execute a classe `src/Main.java`.
-    * Para carregar o projeto com os dados de exemplo, o arquivo `dados.dat` deve estar imediatamente dentro da pasta mais externa em que o projeto for executado.
+    * Execute a classe `src/main/java/Main.java`.
+    * Para carregar o projeto com os dados de exemplo, o arquivo `dados.dat` deve estar imediatamente dentro da pasta `data` for executado.
 4.  **Alternando entre Texto e Gráfico:**
-    * Para mudar a interface, edite o arquivo `src/Main.java`:
+    * Para mudar a interface, edite o arquivo `src/main/java/Main.java`:
     ```java
-    // Use "gui" para Interface Gráfica ou "textual" para Console
+    // Para a interface textual: "textual"
+    // Para a interface gráfica: "gui"
     ViewFactoryProvider.configure("gui");
     ```

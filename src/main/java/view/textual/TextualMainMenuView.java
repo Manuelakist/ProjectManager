@@ -8,6 +8,10 @@ import view.IProjectView;
 import view.IViewFactory;
 import view.ViewFactoryProvider;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -66,9 +70,10 @@ public class TextualMainMenuView implements IMainMenuView {
         System.out.println("1. Listar todos os projetos");
         System.out.println("2. Criar novo projeto");
         System.out.println("3. Selecionar um projeto (para ver/adicionar tarefas)");
-        System.out.println("4. Salvar dados agora");
-        System.out.println("5. Editar um projeto");
-        System.out.println("6. Excluir um projeto");
+        System.out.println("4. Editar um projeto");
+        System.out.println("5. Excluir um projeto");
+        System.out.println("6. Salvar dados agora");
+        System.out.println("7. Carregar dados externos");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -89,13 +94,16 @@ public class TextualMainMenuView implements IMainMenuView {
                 this.handleSelectProject();
                 break;
             case "4":
-                this.handleSaveData();
-                break;
-            case "5":
                 this.handleUpdateProject();
                 break;
-            case "6":
+            case "5":
                 this.handleDeleteProject();
+                break;
+            case "6":
+                this.handleSaveData();
+                break;
+            case "7":
+                this.handleLoadData();
                 break;
             case "0":
                 this.handleExit();
@@ -179,16 +187,7 @@ public class TextualMainMenuView implements IMainMenuView {
     }
 
     /**
-     * Lida com a opção "4. Salvar dados".
-     * Chama o método de salvar do manager.
-     */
-    private void handleSaveData() {
-        System.out.println("Salvando dados...");
-        this.manager.saveData();
-    }
-
-    /**
-     * Lida com a opção "5. Editar um projeto".
+     * Lida com a opção "4. Editar um projeto".
      * Pede o ID e os novos dados do projeto.
      */
     private void handleUpdateProject() {
@@ -223,7 +222,7 @@ public class TextualMainMenuView implements IMainMenuView {
     }
 
     /**
-     * Lida com a opção "6. Excluir um projeto".
+     * Lida com a opção "5. Excluir um projeto".
      * Pede o ID e a confirmação do usuário.
      */
     private void handleDeleteProject() {
@@ -247,6 +246,46 @@ public class TextualMainMenuView implements IMainMenuView {
             }
         } else {
             System.out.println("Exclusão cancelada.");
+        }
+    }
+
+    /**
+     * Lida com a opção "6. Salvar dados".
+     * Chama o método de salvar do manager.
+     */
+    private void handleSaveData() {
+        System.out.println("Salvando dados...");
+        this.manager.saveData();
+    }
+
+    /**
+     * Lida com a opção "7. Carregar dados externos".
+     * Chama o método de carregar a partir de arquivo do manager.
+     */
+    private void handleLoadData() {
+        System.out.println("\n--- Importar Projetos ---");
+        System.out.print("Digite o caminho completo do arquivo .dat (ex: C:\\MeusDados\\projetos.dat): ");
+        String filePath = scanner.nextLine();
+
+        if (model.AppUtils.isStringNullOrEmpty(filePath)) {
+            System.out.println("\nCaminho vazio. Operação cancelada.");
+            return;
+        }
+
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile()) {
+            System.out.println("\nERRO: Arquivo não encontrado ou inválido: " + filePath + ". Operação cancelada");
+            return;
+        }
+
+        try {
+            System.out.println("\nImportando...");
+            this.manager.importProjectsFromFile(file);
+
+            System.out.println("SUCESSO: Projetos importados e adicionados à lista.");
+
+        } catch (Exception e) {
+            System.out.println("ERRO AO IMPORTAR: " + e.getMessage());
         }
     }
 

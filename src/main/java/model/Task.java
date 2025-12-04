@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 public abstract class Task implements Serializable {
 
-    private final String id;
+    private String id;
     private String description;
     private int priority;
     protected Status status;
@@ -75,6 +75,14 @@ public abstract class Task implements Serializable {
     }
 
     // --- SETTERS ---
+
+    /**
+     * Define o ID do projeto (chamado somente para evitar duplicatas entre os IDs na serialização)
+     * @param id O novo ID para o projeto.
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Atualiza a descrição da tarefa após validar que não é nula ou vazia e tem até 100 caracteres.

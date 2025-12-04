@@ -36,6 +36,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
     private JButton buttonSave;
     private JButton buttonEdit;
     private JButton buttonRemove;
+    private JButton buttonLoad;
     private JLabel labelTitle;
     private JPanel titlePanel;
     private JScrollPane tablePane;
@@ -183,12 +184,16 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
             handleSaveData();
         });
 
-        applyHandCursor(buttonCreate, buttonEdit, buttonRemove, buttonSave);
+        buttonLoad.addActionListener(( e -> {
+            handleLoadData();
+        }));
+
+        applyHandCursor(buttonCreate, buttonEdit, buttonRemove, buttonSave, buttonLoad);
 
         /**
          * Adiciona um "ouvinte" de mouse na tabela para:
          * 1. Abrir o projeto com clique duplo.
-         * 2. Mudar o cursor para a "mãozinha" (HAND_CURSOR)
+         * 2. Mudar o cursor para HAND_CURSOR
          * quando o mouse estiver sobre a tabela.
          */
         projectTable.addMouseListener(new MouseAdapter() {
@@ -377,6 +382,29 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
     }
 
     /**
+     * Lida com o clique no botão "Carregar Dados".
+     */
+    private void handleLoadData() {
+
+        JFileChooser fileChooser = new JFileChooser();
+
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+
+            java.io.File selectedFile = fileChooser.getSelectedFile();
+
+            try {
+                manager.importProjectsFromFile(selectedFile);
+                loadProjectList();
+                JOptionPane.showMessageDialog(this, "Projetos importados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao importar arquivo: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
      * Lida com o clique duplo na tabela.
      * Abre a tela de detalhes (GuiProjectView) para o projeto selecionado.
      */
@@ -441,7 +469,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
     }
 
     /**
-     * Método utilitário para adicionar o efeito de "mãozinha" (Hand Cursor)
+     * Método utilitário para adicionar o hand cursor
      * a múltiplos componentes de uma vez.
      * @param components Lista de componentes (botões, labels, etc).
      */
@@ -481,19 +509,27 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
         mainPanel.setEnabled(true);
         mainPanel.setPreferredSize(new Dimension(-1, -1));
         buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayoutManager(1, 4, new Insets(20, 20, 20, 20), -1, -1));
+        buttonsPanel.setLayout(new GridLayoutManager(1, 5, new Insets(20, 20, 20, 20), -1, -1));
         mainPanel.add(buttonsPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 80), new Dimension(-1, 80), 0, false));
         buttonSave = new JButton();
         buttonSave.setText("Salvar");
+        buttonSave.setToolTipText("Salvar modificações");
         buttonsPanel.add(buttonSave, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 80), null, 0, false));
+        buttonLoad = new JButton();
+        buttonLoad.setText("Carregar");
+        buttonLoad.setToolTipText("Carregar dados de um arquivo externo");
+        buttonsPanel.add(buttonLoad, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 80), null, 0, false));
         buttonEdit = new JButton();
         buttonEdit.setText("Editar");
+        buttonEdit.setToolTipText("Editar dados do projeto");
         buttonsPanel.add(buttonEdit, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 80), null, 0, false));
         buttonRemove = new JButton();
         buttonRemove.setText("Remover");
+        buttonRemove.setToolTipText("Remover projeto");
         buttonsPanel.add(buttonRemove, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 80), null, 0, false));
         buttonCreate = new JButton();
         buttonCreate.setText("Criar");
+        buttonCreate.setToolTipText("Criar projeto");
         buttonsPanel.add(buttonCreate, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 80), null, 0, false));
         titlePanel = new JPanel();
         titlePanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.StreamCorruptedException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
@@ -71,6 +72,39 @@ public class ProjectManager {
         } catch (Exception e) {
             System.err.println("ERRO CRÍTICO: Falha ao salvar dados: " + e.getMessage());
         }
+    }
+
+    /**
+     * Carrega projetos de um arquivo externo específico e os adiciona à lista atual.
+     * @param file O arquivo selecionado pelo usuário.
+     * @throws Exception Se ocorrer um erro imprevisto.
+     */
+    public void importProjectsFromFile(java.io.File file) throws StreamCorruptedException, ClassCastException, Exception {
+
+        try {
+            IPersistenceDAO externalDao = new SerializedProjectDAO(file.getAbsolutePath());
+            ArrayList<Project> externalProjects = externalDao.load();
+
+            if (externalProjects != null && !externalProjects.isEmpty()) {
+
+                for (Project p : externalProjects) {
+                    p.setId(String.valueOf(nextProjectId++));
+
+                    for (Task t : p.getTasks()) {
+                        t.setId(String.valueOf(nextTaskId++));
+                    }
+                }
+
+                this.projects.addAll(externalProjects);
+            }
+        } catch (StreamCorruptedException e) {
+            throw new StreamCorruptedException("tipo inválido. O arquivo deve ser .dat.");
+        } catch (ClassCastException e) {
+            throw new ClassCastException("os dados do arquivo são incompatíveis com o sistema.");
+        } catch (Exception e) {
+            throw new Exception("falha ao carregar dados");
+        }
+
     }
 
     // --- Métodos de CRUD de Projeto ---

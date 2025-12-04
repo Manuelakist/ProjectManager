@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class Project implements Serializable {
 
-    private final String id;
+    private String id;
     private String name;
     private LocalDate generalDeadline;
     private final ArrayList<Task> tasks;
@@ -150,6 +150,14 @@ public class Project implements Serializable {
     }
 
     // --- SETTERS ---
+
+    /**
+     * Define o ID do projeto (chamado somente para evitar duplicatas entre os IDs na serialização)
+     * @param id O novo ID para o projeto.
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Define o nome do projeto, validando que não é nulo ou vazio e tem até 50 caracteres.
