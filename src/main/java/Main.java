@@ -45,7 +45,7 @@ public class Main {
         try {
             // Para a interface textual: "textual"
             // Para a interface gráfica: "gui"
-            ViewFactoryProvider.configure("textual");
+            ViewFactoryProvider.configure("gui");
 
             IViewFactory factory = ViewFactoryProvider.getFactory();
 
