@@ -2,9 +2,9 @@
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Manuelakist/ProjectManager-black?logo=github)](https://github.com/Manuelakist/ProjectManager)
 
-Este é um sistema completo de Gerenciamento de Projetos desenvolvido em Java como trabalho final para a disciplina de Programação Orientada a Objetos.
+Este é um sistema completo de Gerenciamento de Projetos desenvolvido em Java como trabalho final para a disciplina de Programação Orientada a Objetos II.
 
-O objetivo principal deste projeto foi construir uma aplicação robusta do zero, demonstrando domínio prático de arquitetura de software, separação de responsabilidades e aplicação correta de múltiplos Padrões de Projeto (Design Patterns).
+O objetivo principal deste projeto foi construir uma aplicação do zero, utilizando conceitos de arquitetura de software, separação de responsabilidades e aplicação de múltiplos Padrões de Projeto.
 
 ## O que ele faz?
 
@@ -21,11 +21,11 @@ O projeto foi construído seguindo uma arquitetura inspirada no **MVC (Model-Vie
 
 Os seguintes Padrões de Projeto foram aplicados:
 
-1.  **Abstract Factory (Fábrica Abstrata)**
+1.  **Abstract Factory**
     * **Onde:** Pacote `view` (`IViewFactory`, `ViewFactoryProvider`).
     * **Por que:** Permite que o sistema inicie com duas interfaces completamente distintas (**Gráfica/Swing** ou **Textual/Console**) mudando apenas uma linha de configuração no `Main.java`. O sistema não fica acoplado a uma implementação específica de UI.
 
-2.  **Singleton (Único)**
+2.  **Singleton**
     * **Onde:** `ViewFactoryProvider` (no pacote `view`).
     * **Por que:** Garante que exista apenas uma única instância da fábrica de interface (`IViewFactory`) ativa durante toda a execução do programa. O `Main.java` configura essa instância uma vez, e qualquer parte do sistema pode acessá-la globalmente para criar novas telas, sem precisar passar referências manualmente.
 
@@ -33,11 +33,11 @@ Os seguintes Padrões de Projeto foram aplicados:
     * **Onde:** `IPersistenceDAO` e `SerializedProjectDAO`.
     * **Por que:** A interface `IPersistenceDAO` define um contrato (Strategy) para salvar os dados. O `ProjectManager` não sabe *como* os dados são salvos, ele apenas usa a estratégia fornecida. Neste projeto, utilizamos a **Serialização Nativa do Java** (`SerializedProjectDAO`) para persistir o estado completo dos objetos de forma eficiente.
 
-4.  **Factory Method (Fábrica Simples)**
+4.  **Factory Method**
     * **Onde:** `TaskFactory` no pacote `model`.
     * **Por que:** Centraliza a lógica complexa de criação dos diferentes tipos de tarefas (`SimpleTask`, `DeadlineTask`, `Milestone`). O gerenciador apenas solicita uma tarefa do tipo "X" com os dados "Y", sem precisar conhecer os construtores específicos.
 
-5.  **Façade (Fachada)**
+5.  **Façade**
     * **Onde:** `ProjectManager`.
     * **Por que:** Esta classe atua como a única porta de entrada para o pacote `model`. A `view` não interage diretamente com listas internas ou DAOs; ela solicita tudo ao "Gerente", que orquestra as operações.
 
@@ -66,7 +66,7 @@ Abaixo está o detalhamento de como cada requisito obrigatório da avaliação f
 O sistema é flexível e pode ser executado em dois modos.
 
 ### 1. Interface Gráfica (Swing com FlatLaf)
-Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer uma experiência visual moderna.
+Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer o *look and feel*.
 
 #### Menu Principal (Lista de Projetos)
 ![Menu Principal Gráfico](docs/mainMenu.png)
@@ -77,7 +77,7 @@ Utiliza a biblioteca **FlatLaf** (Dark Purple) para oferecer uma experiência vi
 ---
 
 ### 2. Interface Textual (Console)
-Uma interface robusta e completa via linha de comando, ideal para ambientes sem suporte gráfico.
+Uma interface completa via linha de comando, ideal para ambientes sem suporte gráfico.
 
 #### Menu Principal
 O usuário navega através de opções numéricas.
