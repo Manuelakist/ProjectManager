@@ -387,6 +387,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
     private void handleLoadData() {
 
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Arquivos de Dados (.dat)", "dat"));
 
         int result = fileChooser.showOpenDialog(this);
 
@@ -556,6 +557,7 @@ public class GuiMainMenuView extends JFrame implements IMainMenuView {
         projectTable.setAutoscrolls(true);
         projectTable.setDragEnabled(false);
         projectTable.setEnabled(true);
+        projectTable.setSelectionMode(0);
         projectTable.setFillsViewportHeight(false);
         projectTable.setFocusable(false);
         Font projectTableFont = this.$$$getFont$$$(null, -1, -1, projectTable.getFont());

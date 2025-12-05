@@ -523,6 +523,7 @@ public class GuiProjectView extends JDialog implements IProjectView {
         taskTable.setOpaque(true);
         taskTable.setRequestFocusEnabled(false);
         taskTable.setRowHeight(40);
+        taskTable.setSelectionMode(0);
         taskTable.setShowHorizontalLines(false);
         taskTable.setShowVerticalLines(false);
         taskScrollPane.setViewportView(taskTable);
