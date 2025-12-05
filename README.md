@@ -31,7 +31,7 @@ Os seguintes Padrões de Projeto foram aplicados:
 
 3.  **DAO (Data Access Object) e Strategy**
     * **Onde:** `IPersistenceDAO` e `SerializedProjectDAO`.
-    * **Por que:** A interface `IPersistenceDAO` define um contrato (Strategy) para salvar os dados. O `ProjectManager` não sabe *como* os dados são salvos, ele apenas usa a estratégia fornecida. Neste projeto, utilizamos a **Serialização Nativa do Java** (`SerializedProjectDAO`) para persistir o estado completo dos objetos de forma eficiente.
+    * **Por que:** A interface `IPersistenceDAO` define um contrato (Strategy) para salvar os dados. O `ProjectManager` não sabe *como* os dados são salvos, ele apenas usa a estratégia fornecida. Neste projeto, utilizei a **Serialização Nativa do Java** (`SerializedProjectDAO`) para persistir o estado completo dos objetos de forma eficiente.
 
 4.  **Factory Method**
     * **Onde:** `TaskFactory` no pacote `model`.
@@ -52,8 +52,11 @@ Abaixo está o detalhamento de como cada requisito obrigatório da avaliação f
 * **Pelo menos uma Classe Estática:**
     * A classe `AppUtils` é uma classe utilitária estática final (`final`, construtor privado) usada para validações e formatação de dados em todo o sistema.
 * **Duas implementações concretas por Interface/Abstrata:**
-    * A classe abstrata `Task` possui **3 implementações**: `SimpleTask`, `DeadlineTask` e `Milestone`.
-    * A interface `IViewFactory` possui **2 implementações**: `GuiViewFactory` e `TextualViewFactory`.
+    * **Classe Abstrata `Task` (Model):** Possui **3 implementações** concretas (`SimpleTask`, `DeadlineTask`, `Milestone`).
+    * **Interface `IViewFactory` (Factory):** Possui **2 implementações** (`GuiViewFactory`, `TextualViewFactory`), permitindo a troca completa do ambiente.
+    * **Interface `IMainMenuView` (View):** Possui **2 implementações** (`GuiMainMenuView`, `TextualMainMenuView`), garantindo que o menu principal funcione em ambos os modos.
+    * **Interface `IProjectView` (View):** Possui **2 implementações** (`GuiProjectView`, `TextualProjectView`), abstraindo a visualização dos detalhes do projeto.
+    * **Interface `IPersistenceDAO` (Strategy):** Define o contrato de persistência, permitindo que o sistema funcione independentemente da implementação concreta de armazenamento (atualmente é `SerializedProjectDAO`, mas permite a implementação de outras formas de persistência sem alterar o restante do código).
 * **Encapsulamento:**
     * Todos os atributos são `private`. O acesso e modificação são feitos estritamente via Getters e Setters com validação de dados (ex: não permitir datas nulas ou nomes vazios).
 * **Herança e Polimorfismo:**
